@@ -9,7 +9,6 @@ from optuna.samplers import BaseSampler
 from optuna.study import StudyDirection
 from optuna.trial import TrialState
 from scipy.stats import norm
-from sklearn.preprocessing import PowerTransformer
 from scipy.stats import t
 
 

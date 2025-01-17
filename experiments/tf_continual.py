@@ -8,7 +8,7 @@ import numpy as np
 import optuna
 from _src import TFContinualSampler, set_logger
 from _src import WarcraftObjective, ConstraintWarcraft, get_map
-from _src import sphere, ackley
+from _src import sphere, ackley, Eggholder
 
 
 def objective(trial, dimension=None, function=None, map_shape=None, objective_function=None):
