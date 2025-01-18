@@ -8,21 +8,18 @@ import numpy as np
 import optuna
 from _src import TFContinualSampler, set_logger
 from _src import WarcraftObjective, ConstraintWarcraft, get_map
-from _src import sphere, ackley, Eggholder
+from _src import EggholderTF as Eggholder
 
 
-def objective(trial, dimension=None, function=None, map_shape=None, objective_function=None):
+def objective(trial, function=None, map_shape=None, objective_function=None):
     """
     Objective function for Bayesian optimization.
     """
-    if function in ["sphere", "ackley"]:
-        categories = list(range(-5, 6))
+    if function == "eggholder":
+        categories = list(range(-512, 513))
 
-        x = np.array([trial.suggest_categorical(f"x_{i}", categories) for i in range(dimension)])
-        if function == "sphere":
-            return sphere(x)
-        elif function == "ackley":
-            return ackley(x)
+        x = np.array([trial.suggest_categorical(f"x_{i}", categories) for i in range(2)])
+        return objective_function.evaluate(x)
     elif function == "warcraft":
         directions = ["oo", "ab", "ac", "ad", "bc", "bd", "cd"]
 
@@ -40,11 +37,11 @@ def run_bo(settings):
 
     function = settings["function"]
     
-    if function in ["sphere", "ackley"]:
-        if settings["constraint"]:
-            raise ValueError("Constraint not supported for this function")
-        dimension = settings["dimension"]
-        objective_with_args = partial(objective, dimension=dimension, function=function)
+    if function == "eggholder":
+        objective_function = Eggholder(constrain=settings["constraint"])
+        tensor_constraint = objective_function._tensor_constraint if settings["constraint"] else None
+        objective_with_args = partial(objective, function=function, objective_function=objective_function)
+
     elif function == "warcraft":
         map_targeted = settings["map"]
         map_shape = map_targeted.shape
@@ -60,17 +57,15 @@ def run_bo(settings):
         objective_with_args = partial(objective, map_shape=map_shape, objective_function=objective_function, function=function)
     else:
         raise ValueError(f"Unsupported function type: {function}")
-    
-    acqf = settings["acqf_settings"]["acquisition_function"]
 
     sampler = TFContinualSampler(
         seed=settings["seed"],
         method=settings["tf_settings"]["method"],
-        acquisition_function=acqf,
+        acquisition_function="ei",
         sampler_params={
             "n_startup_trials": settings["sampler_settings"].get("n_startup_trials", 1),
-            "decomp_iter_num": settings["sampler_settings"].get("decomp_iter_num", 10) if acqf != "ts" else 1,
-            "mask_ratio": settings["sampler_settings"].get("mask_ratio", 0.9),
+            "decomp_iter_num": settings["sampler_settings"].get("decomp_iter_num", 10),
+            "mask_ratio": settings["sampler_settings"].get("mask_ratio", 1),
             "include_observed_points": settings["sampler_settings"].get("include_observed_points", False),
             "unique_sampling": settings["sampler_settings"].get("unique_sampling", False),
         },
@@ -81,9 +76,6 @@ def run_bo(settings):
             "tol": settings["tf_settings"]["optim_params"]["tol"],
             "reg_lambda": settings["tf_settings"]["optim_params"]["reg_lambda"],
             "constraint_lambda": settings["tf_settings"]["optim_params"]["constraint_lambda"],
-        },
-        acqf_params={
-            "trade_off_param": settings["acqf_settings"]["trade_off_param"],
         },
         tensor_constraint=tensor_constraint
     )
@@ -129,14 +121,15 @@ def run_bo(settings):
         fig.write_image(plot_path)
         logging.info(f"Saved optimization history plot to {plot_path}")
 
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Bayesian Optimization with Tensor Factorization")
     # Basic parameters
     parser.add_argument("--timestamp", type=str, help="Timestamp for the experiment")
     parser.add_argument("--seed", type=int, default=0, help="Random seed")
     parser.add_argument("--iter_bo", type=int, default=300, help="Number of BO iterations")
-    parser.add_argument("--dimension", type=int, default=2, help="Problem dimension")
-    parser.add_argument("--function", type=str, choices=["sphere", "ackley", "warcraft"], default="sphere")
+    parser.add_argument("--function", type=str, choices=["warcraft", "eggholder"], default="warcraft")
+    parser.add_argument("--dimension", type=int, default=2, help="Dimension of the function")
     parser.add_argument("--map_option", type=int, choices=[1, 2, 3], default=1)
     parser.add_argument("--constraint", action="store_true", help="Use constraint in the objective function")
     parser.add_argument("--direction", action="store_true", help="Maximize the objective function")
@@ -153,14 +146,10 @@ def parse_args():
     
     # Sampler parameters
     parser.add_argument("--decomp_iter_num", type=int, default=10)
-    parser.add_argument("--mask_ratio", type=float, default=0.9)
+    parser.add_argument("--mask_ratio", type=float, default=1)
     parser.add_argument("--include_observed_points", action="store_true")
     parser.add_argument("--unique_sampling", action="store_true")
     parser.add_argument("--n_startup_trials", type=int, default=1)
-
-    # Acquisition function arguments
-    parser.add_argument("--acquisition_function", type=str, choices=["ucb", "ei", "ts"], default="ucb")
-    parser.add_argument("--acq_trade_off_param", type=float, default=1.0)
 
     # Save directory
     parser.add_argument("--plot_save_dir", type=str, help="Directory to save the results")
@@ -212,10 +201,6 @@ if __name__ == "__main__":
                 "reg_lambda": args.tf_reg_lambda,
                 "constraint_lambda": args.tf_constraint_lambda,
             }
-        },
-        "acqf_settings": {
-            "acquisition_function": args.acquisition_function,
-            "trade_off_param": args.acq_trade_off_param,
         },
         "sampler_settings": {
             "decomp_iter_num": args.decomp_iter_num,
