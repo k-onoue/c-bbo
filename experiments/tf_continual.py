@@ -9,6 +9,7 @@ import optuna
 from _src import TFContinualSampler, set_logger
 from _src import WarcraftObjective, ConstraintWarcraft, get_map
 from _src import EggholderTF as Eggholder
+from _src import AckleyTF as Ackley
 
 
 def objective(trial, function=None, map_shape=None, objective_function=None):
@@ -16,13 +17,15 @@ def objective(trial, function=None, map_shape=None, objective_function=None):
     Objective function for Bayesian optimization.
     """
     if function == "eggholder":
-        categories = list(range(-512, 513))
-
+        categories = list(range(-100, 100))
+        x = np.array([trial.suggest_categorical(f"x_{i}", categories) for i in range(2)])
+        return objective_function.evaluate(x)
+    elif function == "ackley":
+        categories = list(range(-3, 4))
         x = np.array([trial.suggest_categorical(f"x_{i}", categories) for i in range(2)])
         return objective_function.evaluate(x)
     elif function == "warcraft":
         directions = ["oo", "ab", "ac", "ad", "bc", "bd", "cd"]
-
         x = np.empty(map_shape, dtype=object)
         for i in range(map_shape[0]):
             for j in range(map_shape[1]):
@@ -41,7 +44,11 @@ def run_bo(settings):
         objective_function = Eggholder(constrain=settings["constraint"])
         tensor_constraint = objective_function._tensor_constraint if settings["constraint"] else None
         objective_with_args = partial(objective, function=function, objective_function=objective_function)
-
+    elif function == "ackley":
+        objective_function = Ackley(constrain=settings["constraint"])
+        tensor_constraint = objective_function._tensor_constraint if settings["constraint"] else None
+        print(tensor_constraint)
+        objective_with_args = partial(objective, function=function, objective_function=objective_function)
     elif function == "warcraft":
         map_targeted = settings["map"]
         map_shape = map_targeted.shape
@@ -128,7 +135,7 @@ def parse_args():
     parser.add_argument("--timestamp", type=str, help="Timestamp for the experiment")
     parser.add_argument("--seed", type=int, default=0, help="Random seed")
     parser.add_argument("--iter_bo", type=int, default=300, help="Number of BO iterations")
-    parser.add_argument("--function", type=str, choices=["warcraft", "eggholder"], default="warcraft")
+    parser.add_argument("--function", type=str, choices=["warcraft", "eggholder", "ackley"], default="warcraft")
     parser.add_argument("--dimension", type=int, default=2, help="Dimension of the function")
     parser.add_argument("--map_option", type=int, choices=[1, 2, 3], default=1)
     parser.add_argument("--constraint", action="store_true", help="Use constraint in the objective function")

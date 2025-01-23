@@ -77,7 +77,7 @@ class AckleyTF:
         self,
         constrain=False,
     ):
-        self.bounds = [-32, 32]
+        self.bounds = [-3, 3]
         self.n_dim = 2
         self.min = [0, 0]
         self.fmin = 0
@@ -95,7 +95,7 @@ class AckleyTF:
             np.arange(self.bounds[0], self.bounds[1] + 1)
         )
         R_squared = X**2 + Y**2
-        self._tensor_constraint = (R_squared > 5**2).astype(int)
+        self._tensor_constraint = (R_squared < 2**2).astype(int)
 
     def _coord_to_index(self, x):
         return [int(xi - self.bounds[0]) for xi in x]

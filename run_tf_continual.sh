@@ -20,7 +20,9 @@ run_experiment() {
     local cmd=(
         python3 "$EXE_FILE"
         --timestamp "$timestamp"
-        --function "warcraft"
+        # --function "warcraft"
+        --function "ackley"
+        # --function "eggholder"
         --seed "$seed"
         --map_option "$map_option"
         # TF parameters
@@ -35,8 +37,6 @@ run_experiment() {
         --mask_ratio "$mask_ratio"
         --n_startup_trials "$n_startup_trials"
         # Acquisition function parameters
-        --acquisition_function "$acquisition_function"
-        --acq_trade_off_param 1.0
         # Other parameters
         --iter_bo "$iter_bo"
         --plot_save_dir "$plot_save_dir"
@@ -59,8 +59,7 @@ cp "$0" "$results_dir"
 
 # Experiment configurations
 map_options=(1)
-seed_list=(0 1 2 3 4 5 6 7 8 9)
-# seed_list=(0)
+seed_list=(0 1 2 3 4 5 6 7 8 9) 
 
 # Algorithm parameters
 tf_methods=("train")

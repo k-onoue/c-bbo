@@ -6,7 +6,7 @@ class EggholderBenchmark:
         self,
         constrain=False,
     ):
-        self.bounds = [-512, 512]
+        self.bounds = [-100, 100]
         self.n_dim = 2
         self.min = [446, 449]
         self.fmin = -958.5266506438448

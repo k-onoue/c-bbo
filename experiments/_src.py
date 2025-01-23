@@ -12,6 +12,7 @@ sys.path.append(PROJECT_DIR)
 
 from src.objectives.warcraft import WarcraftObjective, ConstraintWarcraft, get_map
 from src.objectives.eggholder import EggholderBenchmark, EggholderTF
+from src.objectives.ackley import AckleyBenchmark, AckleyTF
 from src.samplers.tf_continual import TFContinualSampler
 from src.utils_experiments import set_logger, parse_experiment_path
 
@@ -21,6 +22,8 @@ __all__ = [
     "ConstraintWarcraft",
     "EggholderBenchmark",
     "EggholderTF",
+    "AckleyBenchmark",
+    "AckleyTF",
     "TFContinualSampler",
     "set_logger",
     "get_map",

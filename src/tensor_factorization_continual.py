@@ -198,120 +198,6 @@ class TensorFactorization:
             result = result.reshape(self.tensor.shape)
             return result
 
-    # def optimize(
-    #     self, 
-    #     lr=0.01, 
-    #     max_iter=None, 
-    #     tol=1e-6, 
-    #     mse_tol=1e-1, 
-    #     const_tol=1e-1, 
-    #     reg_lambda=0.0, 
-    #     constraint_lambda=1
-    # ):
-    #     """
-    #     Perform optimization for the specified decomposition method.
-
-    #     Args:
-    #       - lr: float, learning rate
-    #       - max_iter: int or None, maximum number of iterations (if None, stop based on tol)
-    #       - tol: float, tolerance for total loss change
-    #       - mse_tol: float, tolerance for MSE loss
-    #       - const_tol: float, tolerance for constraint loss
-    #       - reg_lambda: float, L2 regularization coefficient
-    #       - constraint_lambda: float, penalty coefficient for constraint violations
-
-    #     Returns:
-    #       - factors: (Optional) Possibly return the updated factors for reuse
-    #     """
-    #     params = []
-    #     if self.method == "tucker":
-    #         params = [self.core] + self.factors
-    #     else:
-    #         params = self.factors
-
-    #     optimizer = optim.Adam(params, lr=lr)
-    #     # optimizer = optim.Adam(params, lr=lr, weight_decay=0.01)
-    #     # optimizer = optim.SGD(params, lr=lr)
-    #     # optimizer = optim.SGD(params, lr=lr, momentum=0.01)
-    #     prev_loss = float('inf')
-    #     iteration = 0
-
-    #     min_iter = 10
-
-    #     while True:
-    #         optimizer.zero_grad()
-    #         reconstruction = self.reconstruct()
-
-    #         def loss_fn():
-    #             # Count of observed entries
-    #             n_se = torch.sum(self.mask)
-    #             # Count of constraint-violating entries
-    #             n_c = torch.sum(1 - self.constraint)
-    #             n_c = n_c if n_c > 0 else 1
-                
-    #             error_term = self.constraint * self.mask * (self.tensor - reconstruction)
-    #             mse_loss = torch.norm(error_term) ** 2 / n_se if n_se > 0 else 0
-
-    #             sign = 1 if self.is_maximize_c else -1
-    #             violation_term = torch.clamp(
-    #                 (1 - self.constraint) * sign * (reconstruction - self.tensor),
-    #                 min=0
-    #             )
-    #             constraint_loss = constraint_lambda * torch.sum(violation_term) / n_c
-
-    #             # L2 regularization
-    #             l2_loss = torch.tensor(0., device=self.device, dtype=mse_loss.dtype)
-    #             for p in params:
-    #                 l2_loss += torch.norm(p) ** 2 / p.numel()
-    #             l2_loss *= reg_lambda
-
-    #             total_loss = mse_loss + constraint_loss + l2_loss
-    #             return total_loss, mse_loss, constraint_loss, l2_loss
-
-    #         loss, mse_loss, c_loss, l2_loss = loss_fn()
-    #         loss.backward()
-    #         optimizer.step()
-
-    #         # Logging
-    #         self.loss = loss
-    #         self.mse_loss = mse_loss
-    #         self.constraint_loss = c_loss
-    #         self.l2_loss = l2_loss
-
-    #         self.loss_history["epoch"].append(iteration+1)
-    #         self.loss_history["total"].append(loss.item())
-    #         self.loss_history["mse"].append(mse_loss.item())
-    #         self.loss_history["constraint"].append(c_loss.item())
-    #         self.loss_history["l2"].append(l2_loss.item())
-
-    #         if self.verbose:
-    #             logging.info(f"Iter: {iteration}, Loss: {loss.item()}")
-    #             logging.info(f"MSE: {mse_loss.item()}, CONST: {c_loss.item()}, L2: {l2_loss.item()}")
-
-    #         # Check for MSE and constraint convergence
-    #         if mse_loss < mse_tol and c_loss < const_tol and iteration > min_iter:
-    #             if self.verbose:
-    #                 logging.info("Converged based on MSE and constraint tolerance.")
-    #             break
-
-    #         # Check for total loss difference
-    #         if abs(prev_loss - loss.item()) < tol and iteration > min_iter:
-    #             if self.verbose:
-    #                 logging.info("Converged based on total loss tolerance.")
-    #             break
-
-    #         if max_iter is not None and iteration >= max_iter - 1 and iteration > min_iter:
-    #             if self.verbose:
-    #                 logging.info("Reached max iteration limit.")
-    #             break
-
-    #         prev_loss = loss.item()
-    #         iteration += 1
-
-    #     self.iter_end = iteration
-
-    #     return [p.detach() for p in params]
-
     def optimize(
         self, 
         lr=0.01, 
@@ -320,7 +206,8 @@ class TensorFactorization:
         mse_tol=1e-1, 
         const_tol=1e-1, 
         reg_lambda=0.0, 
-        constraint_lambda=1
+        constraint_lambda=1,
+        thr=0.5,
     ):
         """
         Perform optimization for the specified decomposition method.
@@ -344,13 +231,17 @@ class TensorFactorization:
             params = self.factors
 
         optimizer = optim.Adam(params, lr=lr)
-        # optimizer = optim.Adam(params, lr=lr, weight_decay=0.01)
-        # optimizer = optim.SGD(params, lr=lr)
-        # optimizer = optim.SGD(params, lr=lr, momentum=0.01)
         prev_loss = float('inf')
         iteration = 0
 
         min_iter = 10
+
+        if self.is_maximize_c:
+            sign = 1
+            # thr = torch.min(self.tensor)
+        else:
+            sign = -1
+            # thr = torch.max(self.tensor)
 
         while True:
             optimizer.zero_grad()
@@ -365,13 +256,6 @@ class TensorFactorization:
                 
                 error_term = self.constraint * self.mask * (self.tensor - reconstruction)
                 mse_loss = torch.norm(error_term) ** 2 / n_se if n_se > 0 else 0
-
-                if self.is_maximize_c:
-                    sign = 1
-                    thr = torch.min(self.tensor)
-                else:
-                    sign = -1
-                    thr = torch.max(self.tensor)
 
                 violation_term = torch.clamp(
                     (1 - self.constraint) * sign * (reconstruction - thr),
@@ -429,5 +313,11 @@ class TensorFactorization:
             iteration += 1
 
         self.iter_end = iteration
+
+
+        logging.info(f"Threshold: {thr}")
+        logging.info(f"valid best: {torch.min(self.tensor[self.mask.bool()])}")
+        logging.info(f"satisfy best: {torch.min(self.tensor[self.constraint.bool()])}")
+        logging.info(f"all best: {torch.min(self.tensor)}")
 
         return [p.detach() for p in params]
