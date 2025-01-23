@@ -314,10 +314,4 @@ class TensorFactorization:
 
         self.iter_end = iteration
 
-
-        logging.info(f"Threshold: {thr}")
-        logging.info(f"valid best: {torch.min(self.tensor[self.mask.bool()])}")
-        logging.info(f"satisfy best: {torch.min(self.tensor[self.constraint.bool()])}")
-        logging.info(f"all best: {torch.min(self.tensor)}")
-
         return [p.detach() for p in params]
