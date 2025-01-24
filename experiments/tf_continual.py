@@ -7,7 +7,8 @@ import random
 import numpy as np
 import optuna
 from _src import TFContinualSampler, set_logger
-from _src import WarcraftObjective, ConstraintWarcraft, get_map
+from _src import ConstraintWarcraft, get_map
+from _src import WarcraftObjectiveTF as WarcraftObjective
 from _src import EggholderTF as Eggholder
 from _src import AckleyTF as Ackley
 
@@ -21,7 +22,7 @@ def objective(trial, function=None, map_shape=None, objective_function=None):
         x = np.array([trial.suggest_categorical(f"x_{i}", categories) for i in range(2)])
         return objective_function.evaluate(x)
     elif function == "ackley":
-        categories = list(range(-3, 4))
+        categories = list(range(-32, 33))
         x = np.array([trial.suggest_categorical(f"x_{i}", categories) for i in range(2)])
         return objective_function.evaluate(x)
     elif function == "warcraft":
@@ -47,7 +48,6 @@ def run_bo(settings):
     elif function == "ackley":
         objective_function = Ackley(constrain=settings["constraint"])
         tensor_constraint = objective_function._tensor_constraint if settings["constraint"] else None
-        print(tensor_constraint)
         objective_with_args = partial(objective, function=function, objective_function=objective_function)
     elif function == "warcraft":
         map_targeted = settings["map"]
@@ -84,7 +84,8 @@ def run_bo(settings):
             "reg_lambda": settings["tf_settings"]["optim_params"]["reg_lambda"],
             "constraint_lambda": settings["tf_settings"]["optim_params"]["constraint_lambda"],
         },
-        tensor_constraint=tensor_constraint
+        tensor_constraint=tensor_constraint,
+        acqf_dist=settings["sampler_settings"]["acqf_dist"],
     )
 
     direction = "maximize" if settings["direction"] else "minimize"
@@ -149,7 +150,6 @@ def parse_args():
     parser.add_argument("--tf_tol", type=float, default=1e-5, help="Convergence tolerance")
     parser.add_argument("--tf_reg_lambda", type=float, default=1e-3, help="Regularization strength")
     parser.add_argument("--tf_constraint_lambda", type=float, default=1.0, help="Constraint penalty")
-    # parser.add_argument("--tf_fill_method", type=str, choices=["zero", "normal", "minmax"], default="zero")
     
     # Sampler parameters
     parser.add_argument("--decomp_iter_num", type=int, default=10)
@@ -157,6 +157,7 @@ def parse_args():
     parser.add_argument("--include_observed_points", action="store_true")
     parser.add_argument("--unique_sampling", action="store_true")
     parser.add_argument("--n_startup_trials", type=int, default=1)
+    parser.add_argument("--acqf_dist", type=str, choices=["n", "t1", "t2"], default="n")
 
     # Save directory
     parser.add_argument("--plot_save_dir", type=str, help="Directory to save the results")
@@ -215,6 +216,7 @@ if __name__ == "__main__":
             "include_observed_points": args.include_observed_points,
             "unique_sampling": args.unique_sampling,
             "n_startup_trials": args.n_startup_trials,
+            "acqf_dist": args.acqf_dist
         },
     }
 

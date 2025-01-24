@@ -10,21 +10,26 @@ LOG_DIR = config["paths"]["logs_dir"]
 DB_DIR = config["paths"]["dbs_dir"]
 sys.path.append(PROJECT_DIR)
 
-from src.objectives.warcraft import WarcraftObjective, ConstraintWarcraft, get_map
+from src.objectives.warcraft import ConstraintWarcraft, get_map
+from src.objectives.warcraft import WarcraftObjectiveTF
+from src.objectives.warcraft import WarcraftObjectiveBenchmark
 from src.objectives.eggholder import EggholderBenchmark, EggholderTF
 from src.objectives.ackley import AckleyBenchmark, AckleyTF
 from src.samplers.tf_continual import TFContinualSampler
+from src.samplers.gp import GPSampler
 from src.utils_experiments import set_logger, parse_experiment_path
 
 
 __all__ = [
-    "WarcraftObjective",
+    "WarcraftObjectiveTF",
+    "WarcraftObjectiveBenchmark",
     "ConstraintWarcraft",
     "EggholderBenchmark",
     "EggholderTF",
     "AckleyBenchmark",
     "AckleyTF",
     "TFContinualSampler",
+    "GPSampler",
     "set_logger",
     "get_map",
     "parse_experiment_path",

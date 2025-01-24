@@ -31,10 +31,11 @@ run_experiment() {
         --map_option 1
         --tf_method train
         --tf_rank 3
+        --acqf_dist t1 # n, t1, t2
     )
 
     # オプションパラメータの追加
-    local constraint=false
+    local constraint=true
     local direction=false
     [ "$constraint" = true ] && COMMON_ARGS+=(--constraint)
     [ "$direction" = true ] && COMMON_ARGS+=(--direction)
@@ -45,7 +46,7 @@ run_experiment() {
 #SBATCH --partition=cluster_short
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=5
+#SBATCH --cpus-per-task=20
 #SBATCH --time=4:00:00
 #SBATCH --output=%x_%j.log
 

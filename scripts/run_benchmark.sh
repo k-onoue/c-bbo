@@ -1,96 +1,94 @@
 #!/bin/bash
 
-# File to execute
 EXE_FILE="experiments/benchmark.py"
-
-# Function to run the benchmark
-run_benchmark() {
-    local function=$1
-    local timestamp=$2
-    local sampler=$3
-    local dimension=$4
-    local iter_bo=$5
-    local seed=$6
-    local map_option=$7
-
-    # Build the command
-    local cmd=(
-        python3 "$EXE_FILE"
-        --timestamp "$timestamp"
-        --function "$function"
-        --sampler "$sampler"
-        --dimension "$dimension"
-        --iter_bo "$iter_bo"
-        --seed "$seed"
-        --map_option "$map_option"
-        --n_startup_trials "$n_startup_trials"
-    )
-
-    # Execute the command in the background
-    "${cmd[@]}" &
-}
-
-# Initialize timestamp and results directory
-timestamp=$(date +"%Y-%m-%d_%H-%M-%S")
-results_dir="results/$timestamp"
-mkdir -p "$results_dir"
-cp "$0" "$results_dir"  # Copy script for reproducibility
-
-# General experiment parameters
-iter_bo=500
-n_startup_trials=1
+EXE_FILE_C="experiments/benchmark-constrained.py"
 
 # Experiment configurations
-# sampler_list=("tpe" "random" "gp" "hgp")
-# sampler_list=("gp" "hgp")
-sampler_list=("botorch")
-# functions=("warcraft" "sphere" "ackley")  # Add "sphere" and "ackley" as needed
-functions=("sphere" "ackley")  # Add "sphere" and "ackley" as needed
-dimensions=(2 3 4 5 6 7 8 9)
-# dimensions=(4 6)
-map_options=(1 2 3)
+iter_bo=3
+n_startup_trials=1
+n_init_violation_paths=20
+sampler_list=("tpe" "gp")
+functions=("warcraft" "ackley")
+map_options=(1 2)
 # seed_list=(0 1 2 3 4 5 6 7 8 9)
-seed_list=(0 1 2 3 4 5 6 7 8 9)
+seed_list=(0 1)
+constraint=false
 
-# Main experiment loop
+# Initialize timestamp and directories
+timestamp=$(date +"%Y-%m-%d_%H-%M-%S")
+results_dir="results/$timestamp"
+plot_save_dir="$results_dir/plots"
+mkdir -p "$results_dir" "$plot_save_dir"
+cp "$0" "$results_dir"
 
+# Run all jobs
 for function in "${functions[@]}"; do
-    case $function in
-        "sphere" | "ackley")
-            for dimension in "${dimensions[@]}"; do
-                for sampler in "${sampler_list[@]}"; do
-                    for seed in "${seed_list[@]}"; do
-                        run_benchmark "$function" "$timestamp" "$sampler" "$dimension" "$iter_bo" "$seed" 1
-                    done
+    for sampler in "${sampler_list[@]}"; do
+        for seed in "${seed_list[@]}"; do
+            if [ "$function" = "warcraft" ]; then
+                for map_option in "${map_options[@]}"; do
+                    log_file="log-$function-$sampler-$seed-$map_option.log"
 
-                    # Wait for current sampler's processes to complete
-                    wait
+                    echo "Running: $function $sampler seed=$seed map_option=$map_option"
+
+                    if [ "$constraint" = true ]; then
+                        python3 "$EXE_FILE_C" \
+                            --timestamp "$timestamp" \
+                            --function "$function" \
+                            --sampler "$sampler" \
+                            --iter_bo "$iter_bo" \
+                            --n_init_violation_paths "$n_init_violation_paths" \
+                            --seed "$seed" \
+                            --map_option "$map_option" \
+                            --n_startup_trials "$n_startup_trials" \
+                            --plot_save_dir "$plot_save_dir" \
+                            &> "$log_file" &
+                    else
+                        python3 "$EXE_FILE" \
+                            --timestamp "$timestamp" \
+                            --function "$function" \
+                            --sampler "$sampler" \
+                            --iter_bo "$iter_bo" \
+                            --seed "$seed" \
+                            --map_option "$map_option" \
+                            --n_startup_trials "$n_startup_trials" \
+                            --plot_save_dir "$plot_save_dir" \
+                            &> "$log_file" &
+                    fi
                 done
-            done
-            ;;
-        "warcraft")
-            for map_option in "${map_options[@]}"; do
-                for sampler in "${sampler_list[@]}"; do
-                    for seed in "${seed_list[@]}"; do
-                        run_benchmark "$function" "$timestamp" "$sampler" 2 "$iter_bo" "$seed" "$map_option"
-                    done
+            else
+                log_file="log-$function-$sampler-$seed.log"
 
-                    # Wait for current sampler's processes to complete
-                    wait
-                done
-            done
-            ;;
-    esac
+                echo "Running: $function $sampler seed=$seed"
 
-    # Wait for current function's processes to complete
-    # wait
+                if [ "$constraint" = true ]; then
+                    python3 "$EXE_FILE_C" \
+                        --timestamp "$timestamp" \
+                        --function "$function" \
+                        --sampler "$sampler" \
+                        --iter_bo "$iter_bo" \
+                        --n_init_violation_paths "$n_init_violation_paths" \
+                        --seed "$seed" \
+                        --n_startup_trials "$n_startup_trials" \
+                        --plot_save_dir "$plot_save_dir" \
+                        &> "$log_file" &
+                else
+                    python3 "$EXE_FILE" \
+                        --timestamp "$timestamp" \
+                        --function "$function" \
+                        --sampler "$sampler" \
+                        --iter_bo "$iter_bo" \
+                        --seed "$seed" \
+                        --n_startup_trials "$n_startup_trials" \
+                        --plot_save_dir "$plot_save_dir" \
+                        &> "$log_file" &
+                fi
+            fi
+        done
+    done
 done
 
-
-
-# Wait for all background processes to complete
+# Wait for all background jobs to finish
 wait
 
-# Record completion
-completion_file="$results_dir/completion.txt"
-echo "All tasks completed at $(date)" > "$completion_file"
+echo "All jobs completed."

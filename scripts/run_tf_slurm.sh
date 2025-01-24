@@ -4,7 +4,7 @@
 #SBATCH --partition=cluster_short
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=20
+#SBATCH --cpus-per-task=1
 #SBATCH --time=4:00:00
 
 EXE_FILE="experiments/tf_continual.py"
@@ -12,8 +12,9 @@ EXE_FILE="experiments/tf_continual.py"
 run_experiment() {
     local seed=$1
     local timestamp=$2
-    local plot_save_dir="results/$timestamp/plots"
+    local plot_save_dir="results_2/$timestamp/plots"
     mkdir -p "$plot_save_dir"
+    touch "$plot_save_dir/t_unconstrained"
 
     # 共通の引数を関数内で定義
     local COMMON_ARGS=(
@@ -24,14 +25,13 @@ run_experiment() {
         --tf_constraint_lambda 1.0
         --decomp_iter_num 10
         --tf_max_iter 10000
-        --acq_trade_off_param 1.0
         --mask_ratio 1
         --n_startup_trials 1
-        --iter_bo 2000
-        --acquisition_function "ei"
-        --map_option 2
+        --iter_bo 500
+        --map_option 1
         --tf_method train
         --tf_rank 3
+        --acqf_dist t1 # n, t1, t2
     )
 
     # オプションパラメータの追加

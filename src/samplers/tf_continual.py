@@ -27,6 +27,7 @@ class TFContinualSampler(BaseSampler):
         torch_device: Optional[torch.device] = None,
         torch_dtype: Optional[torch.dtype] = None,
         tensor_constraint=None,
+        acqf_dist: Literal["n", "t1", "t2"] = "n",
     ):
         # Random seed
         self.seed = seed
@@ -57,6 +58,7 @@ class TFContinualSampler(BaseSampler):
         # Acquisition function parameters
         self.trade_off_param = acqf_params.get("trade_off_param", 1.0)
         self.batch_size = acqf_params.get("batch_size", 1)  # Fixed to 1
+        self.acqf_dist = acqf_dist
 
         # TF optim parameters
         self.rank = tf_params.get("rank", 3)
@@ -484,15 +486,6 @@ class TFContinualSampler(BaseSampler):
         batch_size: int,
         maximize: bool,
     ) -> list[tuple[int, ...]]:
-        
-        # # Yeo-Johnson transformation for mean
-        # def _apply_yeo_johnson(mean_tensor):
-        #     pt = PowerTransformer(method="yeo-johnson", standardize=False)
-        #     mean_tensor = pt.fit_transform(mean_tensor.reshape(-1, 1)).reshape(mean_tensor.shape)
-        #     self.trained_transformer = pt  # Save the transformer for later use
-        #     return mean_tensor
-        
-        # mean_tensor = _apply_yeo_johnson(mean_tensor)
 
         def _ei(mean_tensor, std_tensor, f_best, maximize=True) -> np.ndarray:
             std_tensor = np.clip(std_tensor, 1e-9, None)
@@ -500,11 +493,19 @@ class TFContinualSampler(BaseSampler):
                 z = (mean_tensor - f_best) / std_tensor
             else:
                 z = (f_best - mean_tensor) / std_tensor
-            ei_values = std_tensor * (z * norm.cdf(z) + norm.pdf(z))
-            # n = np.sum(self._tensor_eval_bool)
-            # n = n if n > 1 else 2
-            # # n = 10 # decomp iter num
-            # ei_values = std_tensor * (z * t.cdf(z, df=n-1) + t.pdf(z, df=n-1))
+
+            if self.acqf_dist == "n":
+                ei_values = std_tensor * (z * norm.cdf(z) + norm.pdf(z))
+            elif self.acqf_dist == "t1":
+                n = np.sum(self._tensor_eval_bool)
+                n = n if n > 1 else 2
+                ei_values = std_tensor * (z * t.cdf(z, df=n-1) + t.pdf(z, df=n-1))
+            elif self.acqf_dist == "t2":
+                n = 10 # decomp iter num
+                ei_values = std_tensor * (z * t.cdf(z, df=n-1) + t.pdf(z, df=n-1))
+            else:
+                raise ValueError("acqf_dist must be 'n', 't1', or 't2'.")
+
             return ei_values
 
         tensor_min = np.nanmin(self._tensor_eval)

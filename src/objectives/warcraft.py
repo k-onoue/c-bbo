@@ -96,7 +96,121 @@ def convert_path_index_to_arr(path, map_shape):
     return map
 
 
-class WarcraftObjective:
+class WarcraftObjectiveTF:
+    def __init__(
+        self,
+        weight_matrix: np.ndarray,
+        tensor_constraint: np.ndarray = None,
+    ) -> None:
+        self.weight_matrix = weight_matrix / np.sum(weight_matrix)  # normalize
+        self.shape = weight_matrix.shape
+
+        self._val_mask_dict = {
+            "oo": np.zeros((3, 3)),
+            "ab": np.array([[0, 1, 0], [1, 1, 0], [0, 0, 0]]),
+            "ac": np.array([[0, 0, 0], [1, 1, 1], [0, 0, 0]]),
+            "ad": np.array([[0, 0, 0], [1, 1, 0], [0, 1, 0]]),
+            "bc": np.array([[0, 1, 0], [0, 1, 1], [0, 0, 0]]),
+            "bd": np.array([[0, 1, 0], [0, 1, 0], [0, 1, 0]]),
+            "cd": np.array([[0, 0, 0], [0, 1, 1], [0, 1, 0]]),
+        }
+
+        self._tensor_constraint = tensor_constraint
+
+    def calculate_penalty_type2(self, idx, val, map_shape):
+        # Define the mask dictionary within the function
+        val_mask_dict = self._val_mask_dict
+
+        # Initialize the expanded array with zeros, sized (2*map_shape[0] + 1, 2*map_shape[1] + 1)
+        arr_expanded = np.zeros((map_shape[0] * 2 + 1, map_shape[1] * 2 + 1))
+
+        # Calculate the starting positions for the mask application
+        x_s, y_s = idx[0] * 2, idx[1] * 2
+
+        # Apply the corresponding mask from the dictionary based on 'val'
+        arr_expanded[x_s : x_s + 3, y_s : y_s + 3] = val_mask_dict.get(
+            val, np.zeros((3, 3))
+        )
+
+        # Get the indices of the ones in the expanded array
+        ones_indices = np.argwhere(arr_expanded == 1)
+
+        # Initialize a variable to store the minimum distance
+        row = arr_expanded.shape[0] - 1
+        col = arr_expanded.shape[1] - 1
+
+        max_distance = manhattan_distance((0, 0), (row, col - 1))
+        min_distance = max_distance
+
+        index_goal_list = [(row, col - 1), (row - 1, col)]
+
+        # Iterate through all pairs of (1 indices, target indices)
+        for one_idx in ones_indices:
+            for target_idx in index_goal_list:
+                dist = manhattan_distance(one_idx, target_idx)
+                if dist < min_distance:
+                    min_distance = dist
+
+        penalty = min_distance / max_distance
+        return penalty
+
+    def __call__(self, x):
+        """Calculate the objective function."""
+        if isinstance(x, np.ndarray):
+            direction_matrix = x
+        else:
+            direction_matrix = np.array(x)
+
+        # Create a mask where "oo" is 0 and other directions are 1
+        mask = np.where(direction_matrix == "oo", 0, 1)
+        penalty_1 = np.sum(self.weight_matrix * mask)
+
+        start = (0, 0)
+        goal = (self.shape[0] - 1, self.shape[1] - 1)
+
+        history = navigate_through_matrix(direction_matrix, start, goal)
+
+        if history:
+            penalty_3 = self.calculate_penalty_type2(
+                history[-1], direction_matrix[history[-1]], self.shape
+            )
+        else:
+            penalty_3 = 1
+
+        score = penalty_1 + penalty_3
+        return score
+    
+    def check_penalty_type2(self, x):
+        penalty_3 = self.get_penalty_type2(x)
+        return penalty_3 == 0
+    
+    def get_penalty_type2(self, x):
+        if isinstance(x, np.ndarray):
+            direction_matrix = x
+        else:
+            direction_matrix = np.array(x)
+
+        start = (0, 0)
+        goal = (self.shape[0] - 1, self.shape[1] - 1)
+
+        history = navigate_through_matrix(direction_matrix, start, goal)
+
+        if history:
+            penalty_3 = self.calculate_penalty_type2(
+                history[-1], direction_matrix[history[-1]], self.shape
+            )
+        else:
+            penalty_3 = 1
+
+        return penalty_3
+
+    def visualize(self, x):
+        """Visualize the direction matrix."""
+        direction_matrix = x
+        print(direction_matrix)
+
+
+class WarcraftObjectiveBenchmark:
     def __init__(
         self,
         weight_matrix: np.ndarray,
@@ -170,7 +284,7 @@ class WarcraftObjective:
         ############################################################
         ############################################################
         ############################################################
-        if self._tensor_constraint is not None:
+        if self._tensor_constraint:
             directions_list = list(self._val_mask_dict.keys())
             sequence = tuple(directions_list.index(direction) for direction in direction_matrix.flatten())
             if not self._tensor_constraint[sequence]:
