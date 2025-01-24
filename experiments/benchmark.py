@@ -55,7 +55,7 @@ def run_bo(settings):
         map_targeted = settings["map"]
         map_shape = map_targeted.shape
 
-        objective_function = WarcraftObjective(map_targeted, tensor_constraint=settings["constraint"])
+        objective_function = WarcraftObjective(map_targeted, tensor_constraint=None)
         objective_with_args = partial(objective, map_shape=map_shape, objective_function=objective_function, function=function)
     else:
         raise ValueError(f"Unsupported function type: {function}") 

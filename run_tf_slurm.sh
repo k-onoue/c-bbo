@@ -1,12 +1,4 @@
 #!/bin/bash -l
-#SBATCH --job-name=tf_experiment
-#SBATCH --output=%x_%j.log
-#SBATCH --partition=cluster_short
-#SBATCH --nodes=1
-#SBATCH --ntasks=1
-#SBATCH --cpus-per-task=1
-#SBATCH --time=4:00:00
-
 EXE_FILE="experiments/tf_continual.py"
 
 run_experiment() {
@@ -14,7 +6,6 @@ run_experiment() {
     local timestamp=$2
     local plot_save_dir="results_2/$timestamp/plots"
     mkdir -p "$plot_save_dir"
-    touch "$plot_save_dir/t_unconstrained"
 
     # 共通の引数を関数内で定義
     local COMMON_ARGS=(

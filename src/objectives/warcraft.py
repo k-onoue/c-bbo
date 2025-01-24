@@ -284,7 +284,8 @@ class WarcraftObjectiveBenchmark:
         ############################################################
         ############################################################
         ############################################################
-        if self._tensor_constraint:
+
+        if self._tensor_constraint is not None:
             directions_list = list(self._val_mask_dict.keys())
             sequence = tuple(directions_list.index(direction) for direction in direction_matrix.flatten())
             if not self._tensor_constraint[sequence]:
