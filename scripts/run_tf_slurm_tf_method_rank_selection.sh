@@ -1,8 +1,8 @@
 #!/bin/bash -l
 
-base_dir="results_tf_method_6"
+base_dir="results_tf_method_2"
 acqf_dist=n
-tf_rank=6
+tf_rank=2
 
 # =========================================================================================
 constraint=true

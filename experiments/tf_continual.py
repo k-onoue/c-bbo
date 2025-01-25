@@ -138,7 +138,10 @@ def parse_args():
     parser.add_argument("--iter_bo", type=int, default=300, help="Number of BO iterations")
     parser.add_argument("--function", type=str, choices=["warcraft", "eggholder", "ackley"], default="warcraft")
     parser.add_argument("--dimension", type=int, default=2, help="Dimension of the function")
-    parser.add_argument("--map_option", type=int, choices=[1, 2, 3], default=1)
+
+    if parser.parse_known_args()[0].function == "warcraft":
+        parser.add_argument("--map_option", type=int, choices=[1, 2, 3], default=1)
+
     parser.add_argument("--constraint", action="store_true", help="Use constraint in the objective function")
     parser.add_argument("--direction", action="store_true", help="Maximize the objective function")
 
@@ -160,6 +163,7 @@ def parse_args():
     parser.add_argument("--acqf_dist", type=str, choices=["n", "t1", "t2"], default="n")
 
     # Save directory
+    parser.add_argument("--base_dir", type=str, default="results")
     parser.add_argument("--plot_save_dir", type=str, help="Directory to save the results")
     
     return parser.parse_args()
@@ -171,15 +175,15 @@ if __name__ == "__main__":
     args = parse_args()
 
     timestamp = args.timestamp
-    results_dir = os.path.join("results", timestamp)
+    results_dir = os.path.join(args.base_dir, timestamp)
     os.makedirs(results_dir, exist_ok=True)
 
     if args.function == "warcraft":
         map_targeted = get_map(args.map_option)
-        log_filename_base = f"{args.function}_map{args.map_option}_{args.tf_method}_seed{args.seed}"
+        log_filename_base = f"{args.function}_map{args.map_option}_{args.tf_method}_{args.acqf_dist}_seed{args.seed}"
     else:
         map_targeted = None
-        log_filename_base = f"{args.function}_dim{args.dimension}_{args.tf_method}_seed{args.seed}"
+        log_filename_base = f"{args.function}_dim{args.dimension}_{args.tf_method}_{args.acqf_dist}_seed{args.seed}"
 
     log_filepath = set_logger(log_filename_base, results_dir)
 

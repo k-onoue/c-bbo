@@ -1,8 +1,6 @@
 #!/bin/bash -l
 
-base_dir="results_tf_method_6"
-acqf_dist=n
-tf_rank=6
+base_dir="results_acqf_dist"
 
 # =========================================================================================
 constraint=true
@@ -33,9 +31,9 @@ run_experiment() {
         --mask_ratio 1
         --n_startup_trials 1
         --iter_bo 500
-        --tf_method cp
-        --tf_rank $tf_rank
-        --acqf_dist $acqf_dist # n, t1, t2
+        --tf_method train
+        --tf_rank 3
+        --acqf_dist n # n, t1, t2
     )
 
     # map_option が空でない場合のみ追加
@@ -106,8 +104,8 @@ run_experiment() {
         --n_startup_trials 1
         --iter_bo 500
         --tf_method train
-        --tf_rank $tf_rank
-        --acqf_dist $acqf_dist # n, t1, t2
+        --tf_rank 3
+        --acqf_dist t1 # n, t1, t2
     )
 
     # map_option が空でない場合のみ追加
@@ -177,9 +175,9 @@ run_experiment() {
         --mask_ratio 1
         --n_startup_trials 1
         --iter_bo 500
-        --tf_method ring
-        --tf_rank $tf_rank
-        --acqf_dist $acqf_dist # n, t1, t2
+        --tf_method train
+        --tf_rank 3
+        --acqf_dist t2 # n, t1, t2
     )
 
     # map_option が空でない場合のみ追加
@@ -254,9 +252,9 @@ run_experiment() {
         --mask_ratio 1
         --n_startup_trials 1
         --iter_bo 500
-        --tf_method cp
-        --tf_rank $tf_rank
-        --acqf_dist $acqf_dist # n, t1, t2
+        --tf_method train
+        --tf_rank 3
+        --acqf_dist n # n, t1, t2
     )
 
     # map_option が空でない場合のみ追加
@@ -327,8 +325,8 @@ run_experiment() {
         --n_startup_trials 1
         --iter_bo 500
         --tf_method train
-        --tf_rank $tf_rank
-        --acqf_dist $acqf_dist # n, t1, t2
+        --tf_rank 3
+        --acqf_dist t1 # n, t1, t2
     )
 
     # map_option が空でない場合のみ追加
@@ -398,9 +396,9 @@ run_experiment() {
         --mask_ratio 1
         --n_startup_trials 1
         --iter_bo 500
-        --tf_method ring
-        --tf_rank $tf_rank
-        --acqf_dist $acqf_dist # n, t1, t2
+        --tf_method train
+        --tf_rank 3
+        --acqf_dist t2 # n, t1, t2
     )
 
     # map_option が空でない場合のみ追加
@@ -475,9 +473,9 @@ run_experiment() {
         --mask_ratio 1
         --n_startup_trials 1
         --iter_bo 500
-        --tf_method cp
-        --tf_rank $tf_rank
-        --acqf_dist $acqf_dist # n, t1, t2
+        --tf_method train
+        --tf_rank 3
+        --acqf_dist n # n, t1, t2
     )
 
     # map_option が空でない場合のみ追加
@@ -548,8 +546,8 @@ run_experiment() {
         --n_startup_trials 1
         --iter_bo 500
         --tf_method train
-        --tf_rank $tf_rank
-        --acqf_dist $acqf_dist # n, t1, t2
+        --tf_rank 3
+        --acqf_dist t1 # n, t1, t2
     )
 
     # map_option が空でない場合のみ追加
@@ -619,9 +617,9 @@ run_experiment() {
         --mask_ratio 1
         --n_startup_trials 1
         --iter_bo 500
-        --tf_method ring
-        --tf_rank $tf_rank
-        --acqf_dist $acqf_dist # n, t1, t2
+        --tf_method train
+        --tf_rank 3
+        --acqf_dist t2 # n, t1, t2
     )
 
     # map_option が空でない場合のみ追加
@@ -703,9 +701,9 @@ run_experiment() {
         --mask_ratio 1
         --n_startup_trials 1
         --iter_bo 500
-        --tf_method cp
-        --tf_rank $tf_rank
-        --acqf_dist $acqf_dist # n, t1, t2
+        --tf_method train
+        --tf_rank 3
+        --acqf_dist n # n, t1, t2
     )
 
     # map_option が空でない場合のみ追加
@@ -776,8 +774,8 @@ run_experiment() {
         --n_startup_trials 1
         --iter_bo 500
         --tf_method train
-        --tf_rank $tf_rank
-        --acqf_dist $acqf_dist # n, t1, t2
+        --tf_rank 3
+        --acqf_dist t1 # n, t1, t2
     )
 
     # map_option が空でない場合のみ追加
@@ -847,9 +845,9 @@ run_experiment() {
         --mask_ratio 1
         --n_startup_trials 1
         --iter_bo 500
-        --tf_method ring
-        --tf_rank $tf_rank
-        --acqf_dist $acqf_dist # n, t1, t2
+        --tf_method train
+        --tf_rank 3
+        --acqf_dist t2 # n, t1, t2
     )
 
     # map_option が空でない場合のみ追加
@@ -924,9 +922,9 @@ run_experiment() {
         --mask_ratio 1
         --n_startup_trials 1
         --iter_bo 500
-        --tf_method cp
-        --tf_rank $tf_rank
-        --acqf_dist $acqf_dist # n, t1, t2
+        --tf_method train
+        --tf_rank 3
+        --acqf_dist n # n, t1, t2
     )
 
     # map_option が空でない場合のみ追加
@@ -997,8 +995,8 @@ run_experiment() {
         --n_startup_trials 1
         --iter_bo 500
         --tf_method train
-        --tf_rank $tf_rank
-        --acqf_dist $acqf_dist # n, t1, t2
+        --tf_rank 3
+        --acqf_dist t1 # n, t1, t2
     )
 
     # map_option が空でない場合のみ追加
@@ -1068,9 +1066,9 @@ run_experiment() {
         --mask_ratio 1
         --n_startup_trials 1
         --iter_bo 500
-        --tf_method ring
-        --tf_rank $tf_rank
-        --acqf_dist $acqf_dist # n, t1, t2
+        --tf_method train
+        --tf_rank 3
+        --acqf_dist t2 # n, t1, t2
     )
 
     # map_option が空でない場合のみ追加
@@ -1145,9 +1143,9 @@ run_experiment() {
         --mask_ratio 1
         --n_startup_trials 1
         --iter_bo 500
-        --tf_method cp
-        --tf_rank $tf_rank
-        --acqf_dist $acqf_dist # n, t1, t2
+        --tf_method train
+        --tf_rank 3
+        --acqf_dist n # n, t1, t2
     )
 
     # map_option が空でない場合のみ追加
@@ -1218,8 +1216,8 @@ run_experiment() {
         --n_startup_trials 1
         --iter_bo 500
         --tf_method train
-        --tf_rank $tf_rank
-        --acqf_dist $acqf_dist # n, t1, t2
+        --tf_rank 3
+        --acqf_dist t1 # n, t1, t2
     )
 
     # map_option が空でない場合のみ追加
@@ -1289,9 +1287,9 @@ run_experiment() {
         --mask_ratio 1
         --n_startup_trials 1
         --iter_bo 500
-        --tf_method ring
-        --tf_rank $tf_rank
-        --acqf_dist $acqf_dist # n, t1, t2
+        --tf_method train
+        --tf_rank 3
+        --acqf_dist t2 # n, t1, t2
     )
 
     # map_option が空でない場合のみ追加
