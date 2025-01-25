@@ -13,3 +13,4 @@ optuna/
 params/*
 log*
 *.log
+*.tar.gz
