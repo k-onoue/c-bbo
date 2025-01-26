@@ -1,6 +1,7 @@
 .DS_Store/
 bo-env_v3/
-data/
+# data/
+data/warcraft_evaluations
 __pycache__/
 results*/
 logs/

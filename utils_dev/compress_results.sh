@@ -1,13 +1,28 @@
 #!/bin/bash
 
-# 引数が指定されていない場合は使用法を表示して終了
-if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 target_dir_name"
-    exit 1
-fi
+# 指定されたディレクトリを圧縮する関数
+compress_directory() {
+    local target_dir=$1
+    if [ -d "$target_dir" ]; then
+        tar -czvf "${target_dir}.tar.gz" "${target_dir}"
+        echo "Compressed ${target_dir} to ${target_dir}.tar.gz"
+    else
+        echo "Directory ${target_dir} not found"
+    fi
+}
 
-# コマンドライン引数でディレクトリ名を取得
-target_dir_name=$1
+# 圧縮対象のディレクトリリスト
+directories=(
+    "results_acqf_dist"
+    "results_benchmark"
+    "results_tf_method_2"
+    "results_tf_method_3"
+    "results_tf_method_4"
+    "results_tf_method_5"
+    "results_tf_method_6"
+)
 
-# 圧縮コマンド
-tar -czvf "${target_dir_name}.tar.gz" "${target_dir_name}"
+# 各ディレクトリを圧縮
+for dir in "${directories[@]}"; do
+    compress_directory "$dir"
+done
