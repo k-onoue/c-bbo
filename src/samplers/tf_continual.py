@@ -399,7 +399,7 @@ class TFContinualSampler(BaseSampler):
             max_iter=self.max_iter,
             tol=self.tol,
             mse_tol=1e-2,
-            const_tol=1e-2,
+            const_tol=1e-1,
             reg_lambda=self.reg_lambda,
             constraint_lambda=self.constraint_lambda,
             thr=threshold

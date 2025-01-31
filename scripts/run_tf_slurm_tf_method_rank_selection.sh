@@ -1,8 +1,11 @@
 #!/bin/bash -l
 
-base_dir="results_tf_method_2"
+base_dir="results_tf_method_6"
 acqf_dist=n
-tf_rank=2
+tf_rank=6
+
+partition_name="cluster_long"
+duration="2:00:00"
 
 # =========================================================================================
 constraint=true
@@ -52,11 +55,11 @@ run_experiment() {
     # sbatch でジョブをサブミット
     sbatch --job-name="tf_experiment_seed_${seed}" <<EOF
 #!/bin/bash -l
-#SBATCH --partition=cluster_short
+#SBATCH --partition=$partition_name
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH --time=2:00:00
+#SBATCH --time=$duration
 #SBATCH --output=%x_%j.log
 
 python3 $EXE_FILE \
@@ -124,11 +127,11 @@ run_experiment() {
     # sbatch でジョブをサブミット
     sbatch --job-name="tf_experiment_seed_${seed}" <<EOF
 #!/bin/bash -l
-#SBATCH --partition=cluster_short
+#SBATCH --partition=$partition_name
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH --time=2:00:00
+#SBATCH --time=$duration
 #SBATCH --output=%x_%j.log
 
 python3 $EXE_FILE \
@@ -196,11 +199,11 @@ run_experiment() {
     # sbatch でジョブをサブミット
     sbatch --job-name="tf_experiment_seed_${seed}" <<EOF
 #!/bin/bash -l
-#SBATCH --partition=cluster_short
+#SBATCH --partition=$partition_name
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH --time=2:00:00
+#SBATCH --time=$duration
 #SBATCH --output=%x_%j.log
 
 python3 $EXE_FILE \
@@ -273,11 +276,11 @@ run_experiment() {
     # sbatch でジョブをサブミット
     sbatch --job-name="tf_experiment_seed_${seed}" <<EOF
 #!/bin/bash -l
-#SBATCH --partition=cluster_short
+#SBATCH --partition=$partition_name
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH --time=2:00:00
+#SBATCH --time=$duration
 #SBATCH --output=%x_%j.log
 
 python3 $EXE_FILE \
@@ -345,11 +348,11 @@ run_experiment() {
     # sbatch でジョブをサブミット
     sbatch --job-name="tf_experiment_seed_${seed}" <<EOF
 #!/bin/bash -l
-#SBATCH --partition=cluster_short
+#SBATCH --partition=$partition_name
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH --time=2:00:00
+#SBATCH --time=$duration
 #SBATCH --output=%x_%j.log
 
 python3 $EXE_FILE \
@@ -417,11 +420,11 @@ run_experiment() {
     # sbatch でジョブをサブミット
     sbatch --job-name="tf_experiment_seed_${seed}" <<EOF
 #!/bin/bash -l
-#SBATCH --partition=cluster_short
+#SBATCH --partition=$partition_name
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH --time=2:00:00
+#SBATCH --time=$duration
 #SBATCH --output=%x_%j.log
 
 python3 $EXE_FILE \
@@ -494,11 +497,11 @@ run_experiment() {
     # sbatch でジョブをサブミット
     sbatch --job-name="tf_experiment_seed_${seed}" <<EOF
 #!/bin/bash -l
-#SBATCH --partition=cluster_short
+#SBATCH --partition=$partition_name
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH --time=2:00:00
+#SBATCH --time=$duration
 #SBATCH --output=%x_%j.log
 
 python3 $EXE_FILE \
@@ -566,11 +569,11 @@ run_experiment() {
     # sbatch でジョブをサブミット
     sbatch --job-name="tf_experiment_seed_${seed}" <<EOF
 #!/bin/bash -l
-#SBATCH --partition=cluster_short
+#SBATCH --partition=$partition_name
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH --time=2:00:00
+#SBATCH --time=$duration
 #SBATCH --output=%x_%j.log
 
 python3 $EXE_FILE \
@@ -638,11 +641,11 @@ run_experiment() {
     # sbatch でジョブをサブミット
     sbatch --job-name="tf_experiment_seed_${seed}" <<EOF
 #!/bin/bash -l
-#SBATCH --partition=cluster_short
+#SBATCH --partition=$partition_name
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH --time=2:00:00
+#SBATCH --time=$duration
 #SBATCH --output=%x_%j.log
 
 python3 $EXE_FILE \
@@ -722,11 +725,11 @@ run_experiment() {
     # sbatch でジョブをサブミット
     sbatch --job-name="tf_experiment_seed_${seed}" <<EOF
 #!/bin/bash -l
-#SBATCH --partition=cluster_short
+#SBATCH --partition=$partition_name
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH --time=2:00:00
+#SBATCH --time=$duration
 #SBATCH --output=%x_%j.log
 
 python3 $EXE_FILE \
@@ -794,11 +797,11 @@ run_experiment() {
     # sbatch でジョブをサブミット
     sbatch --job-name="tf_experiment_seed_${seed}" <<EOF
 #!/bin/bash -l
-#SBATCH --partition=cluster_short
+#SBATCH --partition=$partition_name
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH --time=2:00:00
+#SBATCH --time=$duration
 #SBATCH --output=%x_%j.log
 
 python3 $EXE_FILE \
@@ -866,11 +869,11 @@ run_experiment() {
     # sbatch でジョブをサブミット
     sbatch --job-name="tf_experiment_seed_${seed}" <<EOF
 #!/bin/bash -l
-#SBATCH --partition=cluster_short
+#SBATCH --partition=$partition_name
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH --time=2:00:00
+#SBATCH --time=$duration
 #SBATCH --output=%x_%j.log
 
 python3 $EXE_FILE \
@@ -943,11 +946,11 @@ run_experiment() {
     # sbatch でジョブをサブミット
     sbatch --job-name="tf_experiment_seed_${seed}" <<EOF
 #!/bin/bash -l
-#SBATCH --partition=cluster_short
+#SBATCH --partition=$partition_name
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH --time=2:00:00
+#SBATCH --time=$duration
 #SBATCH --output=%x_%j.log
 
 python3 $EXE_FILE \
@@ -1015,11 +1018,11 @@ run_experiment() {
     # sbatch でジョブをサブミット
     sbatch --job-name="tf_experiment_seed_${seed}" <<EOF
 #!/bin/bash -l
-#SBATCH --partition=cluster_short
+#SBATCH --partition=$partition_name
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH --time=2:00:00
+#SBATCH --time=$duration
 #SBATCH --output=%x_%j.log
 
 python3 $EXE_FILE \
@@ -1087,11 +1090,11 @@ run_experiment() {
     # sbatch でジョブをサブミット
     sbatch --job-name="tf_experiment_seed_${seed}" <<EOF
 #!/bin/bash -l
-#SBATCH --partition=cluster_short
+#SBATCH --partition=$partition_name
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH --time=2:00:00
+#SBATCH --time=$duration
 #SBATCH --output=%x_%j.log
 
 python3 $EXE_FILE \
@@ -1164,11 +1167,11 @@ run_experiment() {
     # sbatch でジョブをサブミット
     sbatch --job-name="tf_experiment_seed_${seed}" <<EOF
 #!/bin/bash -l
-#SBATCH --partition=cluster_short
+#SBATCH --partition=$partition_name
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH --time=2:00:00
+#SBATCH --time=$duration
 #SBATCH --output=%x_%j.log
 
 python3 $EXE_FILE \
@@ -1236,11 +1239,11 @@ run_experiment() {
     # sbatch でジョブをサブミット
     sbatch --job-name="tf_experiment_seed_${seed}" <<EOF
 #!/bin/bash -l
-#SBATCH --partition=cluster_short
+#SBATCH --partition=$partition_name
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH --time=2:00:00
+#SBATCH --time=$duration
 #SBATCH --output=%x_%j.log
 
 python3 $EXE_FILE \
@@ -1308,11 +1311,11 @@ run_experiment() {
     # sbatch でジョブをサブミット
     sbatch --job-name="tf_experiment_seed_${seed}" <<EOF
 #!/bin/bash -l
-#SBATCH --partition=cluster_short
+#SBATCH --partition=$partition_name
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH --time=2:00:00
+#SBATCH --time=$duration
 #SBATCH --output=%x_%j.log
 
 python3 $EXE_FILE \

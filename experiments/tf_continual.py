@@ -174,6 +174,9 @@ if __name__ == "__main__":
     base_script_name = os.path.splitext(__file__.split("/")[-1])[0]
     args = parse_args()
 
+    print("Helloooo")
+    logging.info("Helloooo")
+
     timestamp = args.timestamp
     results_dir = os.path.join(args.base_dir, timestamp)
     os.makedirs(results_dir, exist_ok=True)

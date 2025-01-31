@@ -1,0 +1,234 @@
+{
+    "constrained": {
+        "warcraft-1": {
+            "n": [
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-51/warcraft_map1_train_n_seed0.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-51/warcraft_map1_train_n_seed1.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-51/warcraft_map1_train_n_seed2.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-51/warcraft_map1_train_n_seed3.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-51/warcraft_map1_train_n_seed4.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-51/warcraft_map1_train_n_seed5.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-51/warcraft_map1_train_n_seed6.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-51/warcraft_map1_train_n_seed7.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-51/warcraft_map1_train_n_seed8.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-51/warcraft_map1_train_n_seed9.csv"
+            ],
+            "t1": [
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-52/warcraft_map1_train_t1_seed0.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-52/warcraft_map1_train_t1_seed1.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-52/warcraft_map1_train_t1_seed2.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-52/warcraft_map1_train_t1_seed3.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-52/warcraft_map1_train_t1_seed4.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-52/warcraft_map1_train_t1_seed5.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-52/warcraft_map1_train_t1_seed6.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-52/warcraft_map1_train_t1_seed7.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-52/warcraft_map1_train_t1_seed8.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-52/warcraft_map1_train_t1_seed9.csv"
+            ],
+            "t2": [
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-53/warcraft_map1_train_t2_seed0.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-53/warcraft_map1_train_t2_seed1.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-53/warcraft_map1_train_t2_seed2.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-53/warcraft_map1_train_t2_seed3.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-53/warcraft_map1_train_t2_seed4.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-53/warcraft_map1_train_t2_seed5.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-53/warcraft_map1_train_t2_seed6.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-53/warcraft_map1_train_t2_seed7.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-53/warcraft_map1_train_t2_seed8.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-53/warcraft_map1_train_t2_seed9.csv"
+            ]
+        },
+        "warcraft-2": {
+            "n": [
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-54/warcraft_map2_train_n_seed0.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-54/warcraft_map2_train_n_seed1.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-54/warcraft_map2_train_n_seed2.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-54/warcraft_map2_train_n_seed3.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-54/warcraft_map2_train_n_seed4.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-54/warcraft_map2_train_n_seed5.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-54/warcraft_map2_train_n_seed6.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-54/warcraft_map2_train_n_seed7.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-54/warcraft_map2_train_n_seed8.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-54/warcraft_map2_train_n_seed9.csv"
+            ],
+            "t1": [
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-55/warcraft_map2_train_t1_seed0.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-55/warcraft_map2_train_t1_seed1.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-55/warcraft_map2_train_t1_seed2.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-55/warcraft_map2_train_t1_seed3.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-55/warcraft_map2_train_t1_seed4.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-55/warcraft_map2_train_t1_seed5.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-55/warcraft_map2_train_t1_seed6.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-55/warcraft_map2_train_t1_seed7.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-55/warcraft_map2_train_t1_seed8.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-55/warcraft_map2_train_t1_seed9.csv"
+            ],
+            "t2": [
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-57/warcraft_map2_train_t2_seed0.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-57/warcraft_map2_train_t2_seed1.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-57/warcraft_map2_train_t2_seed2.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-57/warcraft_map2_train_t2_seed3.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-57/warcraft_map2_train_t2_seed4.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-57/warcraft_map2_train_t2_seed5.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-57/warcraft_map2_train_t2_seed6.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-57/warcraft_map2_train_t2_seed7.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-57/warcraft_map2_train_t2_seed8.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-57/warcraft_map2_train_t2_seed9.csv"
+            ]
+        },
+        "ackley": {
+            "n": [
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-58/ackley_dim2_train_n_seed0.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-58/ackley_dim2_train_n_seed1.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-58/ackley_dim2_train_n_seed2.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-58/ackley_dim2_train_n_seed3.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-58/ackley_dim2_train_n_seed4.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-58/ackley_dim2_train_n_seed5.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-58/ackley_dim2_train_n_seed6.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-58/ackley_dim2_train_n_seed7.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-58/ackley_dim2_train_n_seed8.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-58/ackley_dim2_train_n_seed9.csv"
+            ],
+            "t1": [
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-59/ackley_dim2_train_t1_seed0.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-59/ackley_dim2_train_t1_seed1.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-59/ackley_dim2_train_t1_seed2.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-59/ackley_dim2_train_t1_seed3.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-59/ackley_dim2_train_t1_seed4.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-59/ackley_dim2_train_t1_seed5.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-59/ackley_dim2_train_t1_seed6.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-59/ackley_dim2_train_t1_seed7.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-59/ackley_dim2_train_t1_seed8.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-39-59/ackley_dim2_train_t1_seed9.csv"
+            ],
+            "t2": [
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-00/ackley_dim2_train_t2_seed0.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-00/ackley_dim2_train_t2_seed1.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-00/ackley_dim2_train_t2_seed2.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-00/ackley_dim2_train_t2_seed3.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-00/ackley_dim2_train_t2_seed4.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-00/ackley_dim2_train_t2_seed5.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-00/ackley_dim2_train_t2_seed6.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-00/ackley_dim2_train_t2_seed7.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-00/ackley_dim2_train_t2_seed8.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-00/ackley_dim2_train_t2_seed9.csv"
+            ]
+        }
+    },
+    "unconstrained": {
+        "warcraft-1": {
+            "n": [
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-01/warcraft_map1_train_n_seed0.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-01/warcraft_map1_train_n_seed1.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-01/warcraft_map1_train_n_seed2.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-01/warcraft_map1_train_n_seed3.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-01/warcraft_map1_train_n_seed4.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-01/warcraft_map1_train_n_seed5.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-01/warcraft_map1_train_n_seed6.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-01/warcraft_map1_train_n_seed7.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-01/warcraft_map1_train_n_seed8.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-01/warcraft_map1_train_n_seed9.csv"
+            ],
+            "t1": [
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-02/warcraft_map1_train_t1_seed0.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-02/warcraft_map1_train_t1_seed1.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-02/warcraft_map1_train_t1_seed2.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-02/warcraft_map1_train_t1_seed3.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-02/warcraft_map1_train_t1_seed4.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-02/warcraft_map1_train_t1_seed5.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-02/warcraft_map1_train_t1_seed6.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-02/warcraft_map1_train_t1_seed7.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-02/warcraft_map1_train_t1_seed8.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-02/warcraft_map1_train_t1_seed9.csv"
+            ],
+            "t2": [
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-04/warcraft_map1_train_t2_seed0.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-04/warcraft_map1_train_t2_seed1.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-04/warcraft_map1_train_t2_seed2.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-04/warcraft_map1_train_t2_seed3.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-04/warcraft_map1_train_t2_seed4.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-04/warcraft_map1_train_t2_seed5.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-04/warcraft_map1_train_t2_seed6.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-04/warcraft_map1_train_t2_seed7.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-04/warcraft_map1_train_t2_seed8.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-04/warcraft_map1_train_t2_seed9.csv"
+            ]
+        },
+        "warcraft-2": {
+            "n": [
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-05/warcraft_map2_train_n_seed0.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-05/warcraft_map2_train_n_seed1.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-05/warcraft_map2_train_n_seed2.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-05/warcraft_map2_train_n_seed3.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-05/warcraft_map2_train_n_seed4.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-05/warcraft_map2_train_n_seed5.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-05/warcraft_map2_train_n_seed6.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-05/warcraft_map2_train_n_seed7.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-05/warcraft_map2_train_n_seed8.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-05/warcraft_map2_train_n_seed9.csv"
+            ],
+            "t1": [
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-06/warcraft_map2_train_t1_seed0.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-06/warcraft_map2_train_t1_seed1.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-06/warcraft_map2_train_t1_seed2.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-06/warcraft_map2_train_t1_seed3.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-06/warcraft_map2_train_t1_seed4.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-06/warcraft_map2_train_t1_seed5.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-06/warcraft_map2_train_t1_seed6.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-06/warcraft_map2_train_t1_seed7.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-06/warcraft_map2_train_t1_seed8.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-06/warcraft_map2_train_t1_seed9.csv"
+            ],
+            "t2": [
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-07/warcraft_map2_train_t2_seed0.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-07/warcraft_map2_train_t2_seed1.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-07/warcraft_map2_train_t2_seed2.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-07/warcraft_map2_train_t2_seed3.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-07/warcraft_map2_train_t2_seed4.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-07/warcraft_map2_train_t2_seed5.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-07/warcraft_map2_train_t2_seed6.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-07/warcraft_map2_train_t2_seed7.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-07/warcraft_map2_train_t2_seed8.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-07/warcraft_map2_train_t2_seed9.csv"
+            ]
+        },
+        "ackley": {
+            "n": [
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-08/ackley_dim2_train_n_seed0.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-08/ackley_dim2_train_n_seed1.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-08/ackley_dim2_train_n_seed2.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-08/ackley_dim2_train_n_seed3.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-08/ackley_dim2_train_n_seed4.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-08/ackley_dim2_train_n_seed5.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-08/ackley_dim2_train_n_seed6.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-08/ackley_dim2_train_n_seed7.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-08/ackley_dim2_train_n_seed8.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-08/ackley_dim2_train_n_seed9.csv"
+            ],
+            "t1": [
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-09/ackley_dim2_train_t1_seed0.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-09/ackley_dim2_train_t1_seed1.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-09/ackley_dim2_train_t1_seed2.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-09/ackley_dim2_train_t1_seed3.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-09/ackley_dim2_train_t1_seed4.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-09/ackley_dim2_train_t1_seed5.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-09/ackley_dim2_train_t1_seed6.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-09/ackley_dim2_train_t1_seed7.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-09/ackley_dim2_train_t1_seed8.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-09/ackley_dim2_train_t1_seed9.csv"
+            ],
+            "t2": [
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-11/ackley_dim2_train_t2_seed0.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-11/ackley_dim2_train_t2_seed1.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-11/ackley_dim2_train_t2_seed2.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-11/ackley_dim2_train_t2_seed3.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-11/ackley_dim2_train_t2_seed4.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-11/ackley_dim2_train_t2_seed5.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-11/ackley_dim2_train_t2_seed6.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-11/ackley_dim2_train_t2_seed7.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-11/ackley_dim2_train_t2_seed8.csv",
+                "/work/keisuke-o/ws/constrained_BO_v3/results_acqf_dist/2025-01-29_16-40-11/ackley_dim2_train_t2_seed9.csv"
+            ]
+        }
+    }
+}
