@@ -439,6 +439,7 @@ class TFContinualSampler(BaseSampler):
         tensors_stack = np.stack(tensors_list)
         mean_tensor = np.mean(tensors_stack, axis=0)
         std_tensor = np.std(tensors_stack, axis=0)
+        std_tensor = np.std(tensors_stack, axis=0, ddof=1)
 
         mean_tensor[tensor_eval_bool] = tensor_eval[tensor_eval_bool]
         std_tensor[tensor_eval_bool] = 1e-8  # small value for observed points

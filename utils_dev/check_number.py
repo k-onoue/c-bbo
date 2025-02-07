@@ -71,7 +71,7 @@ import os
 import pandas as pd
 
 # `results_long` ディレクトリのパス
-results_dir = "results_long"
+results_dir = "results_tf_best_n"
 log_file = "log.txt"
 
 # `log.txt` を開いて記録

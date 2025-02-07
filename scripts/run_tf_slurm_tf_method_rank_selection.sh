@@ -4,7 +4,7 @@ base_dir="results_tf_method_6"
 acqf_dist=n
 tf_rank=6
 
-partition_name="cluster_long"
+partition_name="cluster_short"
 duration="2:00:00"
 
 # =========================================================================================
