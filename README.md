@@ -1,7 +1,7 @@
 # Constrained Black-box Optimization Using Tensor Decomposition
 
-![alt text](images/Ackley.png)
+![Ackley](images/Ackley.png)
 
-![alt text](<images/Warcraft 1.png>)
+![Warcraft 1](images/Warcraft%201.png)
 
-![alt text](<images/Warcraft 2.png>)
+![Warcraft 2](images/Warcraft%202.png)
