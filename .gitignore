@@ -8,7 +8,6 @@ logs/
 logs-archive/
 retrieve*.sh
 send*.sh
-images/
 temp/
 optuna/
 params/*
