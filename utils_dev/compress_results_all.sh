@@ -13,11 +13,11 @@ directories=(
     # "results_tf_method_5_additional"
     # "results_tf_method_6"
     # "results_tf_method_6_additional"
-    "results_new"
+    "results_jsai"
 )
 
 # 圧縮するターゲットファイル名
-output_archive="results_new_all.tar.gz"
+output_archive="results_jsai2025.tar.gz"
 
 # ディレクトリが存在するか確認し、圧縮する
 valid_dirs=()
