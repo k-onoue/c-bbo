@@ -2,7 +2,7 @@ import os
 import argparse
 import numpy as np
 import pandas as pd
-from _src import AckleyTF, WarcraftObjectiveTF, get_map
+from _src import AckleyTF, WarcraftObjectiveTF, get_map, DiabetesObjective
 
 
 def compute_ackley_value(row, objective):
@@ -28,6 +28,13 @@ def compute_warcraft_value(row, objective, map_shape):
             [row['params_x_1_0'], row['params_x_1_1'], row['params_x_1_2']],
             [row['params_x_2_0'], row['params_x_2_1'], row['params_x_2_2']]
         ]
+    return objective(np.array(path))
+
+def compute_diabetes_value(row, objective):
+    path = [
+        row['params_x_age'], row['params_x_insu'], row['params_x_mass'], row['params_x_pedi'], 
+        row['params_x_plas'], row['params_x_preg'], row['params_x_pres'], row['params_x_skin']
+    ]
     return objective(np.array(path))
 
 
@@ -62,6 +69,19 @@ def add_true_values(results_dir):
                 elif "warcraft_map3" in file:
                     objective = WarcraftObjectiveTF(get_map(3))
                     df['value'] = df.apply(lambda row: compute_warcraft_value(row, objective, (3, 3)), axis=1)
+
+                elif "diabetes" in file:
+                    # Extract seed from filename
+                    import re
+                    seed_match = re.search(r'seed(\d+)', file)
+                    seed = int(seed_match.group(1)) if seed_match else 0
+                    
+                    objective = DiabetesObjective(
+                        start_point=np.array([2, 3, 2, 1, 2, 2, 0, 2]),
+                        is_constrained=False,
+                        seed=seed
+                    )
+                    df['value'] = df.apply(lambda row: compute_diabetes_value(row, objective), axis=1)
 
                 df.to_csv(csv_path, index=False)
                 print(f"Successfully updated values in {csv_path}")

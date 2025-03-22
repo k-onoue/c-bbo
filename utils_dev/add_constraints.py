@@ -3,6 +3,8 @@ import os
 import numpy as np
 import pandas as pd
 
+from _src import DiabetesObjective
+
 
 DIRECTIONS_LIST = ["oo", "ab", "ac", "ad", "bc", "bd", "cd"]
 
@@ -38,12 +40,27 @@ def constraint_func_warcraft_map3(row, tensor_constraint):
     path_indices = [DIRECTIONS_LIST.index(direction) for direction in path]
     return bool(tensor_constraint[tuple(path_indices)])
 
+def constraint_func_diabetes(row, tensor_constraint):
+    """Diabetesの制約条件をチェック"""
+    path = [
+        row['params_x_age'], row['params_x_insu'], row['params_x_mass'], row['params_x_pedi'], 
+        row['params_x_plas'], row['params_x_preg'], row['params_x_pres'], row['params_x_skin']
+    ]
+    return bool(tensor_constraint[tuple(path)])
+
 def add_constraint_column(results_dir):
     """CSVファイルに制約条件の列を追加"""
     # Load smaller tensors at startup
-    constraints_dir = "data/warcraft_constraints"
+    constraints_dir = "data_/warcraft_constraints"
     tensor_map1 = np.load(os.path.join(constraints_dir, "map1.npy"))
     tensor_map2 = np.load(os.path.join(constraints_dir, "map2.npy"))
+
+    diabetes_objective = DiabetesObjective(
+        start_point=np.array([2, 3, 2, 1, 2, 2, 0, 2]),
+        is_constrained=False,
+        seed=0
+    )
+    tensor_constraint_diabetes = diabetes_objective._tensor_constraint
 
     for subdir in os.listdir(results_dir):
         subdir_path = os.path.join(results_dir, subdir)
@@ -93,6 +110,8 @@ def add_constraint_column(results_dir):
                     tensor_map3 = np.load(os.path.join(constraints_dir, "map3.npy"))
                     df['constraint'] = df.apply(lambda row: constraint_func_warcraft_map3(row, tensor_map3), axis=1)
                     del tensor_map3
+                elif "diabetes" in file:
+                    df['constraint'] = df.apply(lambda row: constraint_func_diabetes(row, tensor_constraint_diabetes), axis=1)
                 else:
                     continue
 

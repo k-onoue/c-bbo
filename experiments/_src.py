@@ -19,6 +19,7 @@ from src.samplers.tf_continual import TFContinualSampler
 from src.samplers.gp import GPSampler
 from src.utils_experiments import set_logger, parse_experiment_path
 
+from src.objectives.diabetes import DiabetesObjective
 
 __all__ = [
     "WarcraftObjectiveTF",
@@ -33,4 +34,5 @@ __all__ = [
     "set_logger",
     "get_map",
     "parse_experiment_path",
+    "DiabetesObjective",
 ]

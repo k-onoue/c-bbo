@@ -13,6 +13,7 @@ sys.path.append(PROJECT_DIR)
 from src.objectives.warcraft import ConstraintWarcraft, get_map
 from src.objectives.warcraft import WarcraftObjectiveTF
 from src.objectives.ackley import AckleyTF
+from src.objectives.diabetes import DiabetesObjective
 
 
 __all__ = [
@@ -20,4 +21,5 @@ __all__ = [
     "ConstraintWarcraft",
     "AckleyTF",
     "get_map",
+    "DiabetesObjective"
 ]
