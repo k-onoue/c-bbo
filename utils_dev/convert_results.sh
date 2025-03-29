@@ -1,2 +1,6 @@
 # !/bin/bash -l
-python3 utils_dev/convert_results.py results_benchmark_diabetes
+# python3 utils_dev/convert_results.py results_benchmark_diabetes
+python3 utils_dev/convert_results.py results_tf_2_diabetes_complement_2
+python3 utils_dev/convert_results.py results_tf_4_diabetes_complement_2
+python3 utils_dev/convert_results.py results_tf_5_diabetes_complement_2
+python3 utils_dev/convert_results.py results_tf_6_diabetes_complement_2
