@@ -14,3 +14,4 @@ params/*
 log*
 *.log
 *.tar.gz
+data_/warcraft_evaluations/map3.npy
