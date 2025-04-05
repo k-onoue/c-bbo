@@ -86,32 +86,33 @@ EOF
         # For rank 2 (diabetes_2.csv) - Only run missing experiments
         echo "Running CP seed 9 (non-constrained)"
         run_experiment 9 "cp" false
-        
-    elif [ $tf_rank -eq 3 ]; then
-        # For rank 3 (diabetes_3.csv) - all experiments are complete
-        echo "All experiments for tensor rank 3 are already completed."
-        
-    elif [ $tf_rank -eq 4 ]; then
-        # For rank 4 (diabetes_4.csv) - Only run missing experiments
-        echo "Running CP seed 6 (non-constrained)"
-        run_experiment 6 "cp" false
-        echo "Running CP seed 7 (non-constrained)"
-        run_experiment 7 "cp" false
-        
-    elif [ $tf_rank -eq 5 ]; then
-        # For rank 5 (diabetes_5.csv) - all experiments are complete
-        echo "All experiments for tensor rank 5 are already completed."
-        
-    elif [ $tf_rank -eq 6 ]; then
-        # For rank 6 (diabetes_6.csv) - Only run missing experiments
-        echo "Running Train seed 5 (constrained)"
-        run_experiment 5 "train" true
-        echo "Running Train seed 5 (non-constrained)"
-        run_experiment 5 "train" false
     fi
+        
+    # elif [ $tf_rank -eq 3 ]; then
+    #     # For rank 3 (diabetes_3.csv) - all experiments are complete
+    #     echo "All experiments for tensor rank 3 are already completed."
+        
+    # elif [ $tf_rank -eq 4 ]; then
+    #     # For rank 4 (diabetes_4.csv) - Only run missing experiments
+    #     echo "Running CP seed 6 (non-constrained)"
+    #     run_experiment 6 "cp" false
+    #     echo "Running CP seed 7 (non-constrained)"
+    #     run_experiment 7 "cp" false
+        
+    # elif [ $tf_rank -eq 5 ]; then
+    #     # For rank 5 (diabetes_5.csv) - all experiments are complete
+    #     echo "All experiments for tensor rank 5 are already completed."
+        
+    # elif [ $tf_rank -eq 6 ]; then
+    #     # For rank 6 (diabetes_6.csv) - Only run missing experiments
+    #     echo "Running Train seed 5 (constrained)"
+    #     run_experiment 5 "train" true
+    #     echo "Running Train seed 5 (non-constrained)"
+    #     run_experiment 5 "train" false
+    # fi
     
-    echo "Waiting before proceeding to next rank..."
-    sleep 2s
+    # echo "Waiting before proceeding to next rank..."
+    # sleep 2s
 done
 
 echo "All missing experiments submitted!"
