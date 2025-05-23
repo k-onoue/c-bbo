@@ -22,7 +22,10 @@ def objective(trial, function=None, map_shape=None, objective_function=None):
         x = np.array([trial.suggest_categorical(f"x_{i}", categories) for i in range(2)])
         return objective_function.evaluate(x)
     elif function == "ackley":
-        categories = list(range(-32, 33))
+        # categories = list(range(-32, 33))
+        # categories = list(range(-1, 2))
+        categories = list(range(-2, 3))
+        # categories = list(range(-3, 4))
         x = np.array([trial.suggest_categorical(f"x_{i}", categories) for i in range(2)])
         return objective_function.evaluate(x)
     elif function == "warcraft":

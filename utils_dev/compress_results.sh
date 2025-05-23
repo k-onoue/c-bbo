@@ -14,7 +14,8 @@ compress_directory() {
 # 圧縮対象のディレクトリリスト
 directories=(
     # "results_acqf_dist"
-    "results_benchmark"
+    # "results_benchmark"
+    "results_benchmark_additional"
     # "results_tf_method_2"
     # "results_tf_method_2_additional"
     # "results_tf_method_3"
