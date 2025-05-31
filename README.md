@@ -1,16 +1,24 @@
-# Constrained Black-box Optimization Using Tensor Decomposition
-
-![Ackley](images/Ackley.png)
-
-![Warcraft 1](images/Warcraft%201.png)
-
-![Warcraft 2](images/Warcraft%202.png)
+# Constraint-Aware Discrete Black-Box Optimization Using Tensor Decomposition
 
 
-## Stats
 
-| 目的関数       | 総エントリ数 | 実行可能エントリ数 | 実行可能率 |
-|--------------|------------|----------------|----------|
-| Ackley      | 65²       | 305            | 0.072    |
-| Warcraft 1  | 7⁴        | 300            | 0.12     |
-| Warcraft 2  | 7⁶        | 5400           | 0.046    |
+__Contents__
+
+
+
+
+
+## 1. Getting Started
+
+To get started, clone the repository and set up the virtual environment:
+
+```sh
+$ git clone https://github.com/k-onoue/c-bbo.git
+$ cd c-bbo
+$ python3 -m venv .venv
+$ source .venv/bin/activate
+$ pip install --upgrade pip
+$ pip install -r requirements.txt
+```
+
+
