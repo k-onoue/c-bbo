@@ -16,6 +16,7 @@ from src.objectives.warcraft import WarcraftObjectiveBenchmark
 from src.objectives.eggholder import EggholderBenchmark, EggholderTF
 from src.objectives.ackley import AckleyBenchmark, AckleyTF
 from src.samplers.tf_continual import TFContinualSampler
+from src.samplers.tf_sdpa import TFSdpaSampler
 from src.samplers.gp import GPSampler
 from src.utils_experiments import set_logger, parse_experiment_path
 
@@ -30,6 +31,7 @@ __all__ = [
     "AckleyBenchmark",
     "AckleyTF",
     "TFContinualSampler",
+    "TFSdpaSampler",
     "GPSampler",
     "set_logger",
     "get_map",
