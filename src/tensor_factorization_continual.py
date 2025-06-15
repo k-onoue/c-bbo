@@ -208,6 +208,7 @@ class TensorFactorization:
         reg_lambda=0.0, 
         constraint_lambda=1,
         thr=0.5,
+        severe_conv_control=False
     ):
         """
         Perform optimization for the specified decomposition method.
@@ -224,6 +225,12 @@ class TensorFactorization:
         Returns:
           - factors: (Optional) Possibly return the updated factors for reuse
         """
+
+        if max_iter is None:
+            severe_conv_control = True
+        if max_iter is None and not severe_conv_control:
+            max_iter = 1000
+    
         params = []
         if self.method == "tucker":
             params = [self.core] + self.factors
@@ -292,11 +299,12 @@ class TensorFactorization:
                 logging.info(f"Iter: {iteration}, Loss: {loss.item()}")
                 logging.info(f"MSE: {mse_loss.item()}, CONST: {c_loss.item()}, L2: {l2_loss.item()}")
 
-            # Check for MSE and constraint convergence
-            if mse_loss < mse_tol and c_loss < const_tol and iteration > min_iter:
-                if self.verbose:
-                    logging.info("Converged based on MSE and constraint tolerance.")
-                break
+            if severe_conv_control:
+                # Check for severe convergence control
+                if mse_loss < mse_tol and c_loss < const_tol and iteration > min_iter:
+                    if self.verbose:
+                        logging.info("Converged based on severe convergence control.")
+                    break
 
             # Check for total loss difference
             if abs(prev_loss - loss.item()) < tol and iteration > min_iter:

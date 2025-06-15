@@ -131,6 +131,7 @@ def parse_args():
     parser.add_argument("--dimension", type=int, default=2, help="Number of dimensions for the function.")
     parser.add_argument("--function", type=str, choices=["sphere", "ackley", "warcraft", "eggholder"], default="sphere", help="Objective function to optimize.")
     parser.add_argument("--map_option", type=int, choices=[1, 2, 3], default=1, help="Select the map configuration: 1 for 2x2, 2 for 3x2, 3 for 3x3 (only for Warcraft).")
+    parser.add_argument("--base_dir", type=str, default="results")
     parser.add_argument("--plot_save_dir", type=str, help="Directory to save the results")
     return parser.parse_args()
 
@@ -149,7 +150,7 @@ if __name__ == "__main__":
     args = parse_args()
 
     timestamp = args.timestamp
-    results_dir = os.path.join("results", timestamp)
+    results_dir = os.path.join(args.base_dir, timestamp)
     os.makedirs(results_dir, exist_ok=True)
 
     if args.function == "warcraft":

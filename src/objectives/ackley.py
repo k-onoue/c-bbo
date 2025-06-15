@@ -77,12 +77,12 @@ class AckleyTF:
         self,
         constrain=False,
     ):
-        # self.bounds = [-32, 32]
-        # self.radius = 10
+        self.bounds = [-32, 32]
+        self.radius = 10
         # self.bounds = [-1, 1]
         # self.radius = 1
-        self.bounds = [-2, 2]
-        self.radius = 2
+        # self.bounds = [-2, 2]
+        # self.radius = 2
         # self.bounds = [-3, 3]
         # self.radius = 3
         self.n_dim = 2

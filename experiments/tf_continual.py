@@ -22,9 +22,9 @@ def objective(trial, function=None, map_shape=None, objective_function=None):
         x = np.array([trial.suggest_categorical(f"x_{i}", categories) for i in range(2)])
         return objective_function.evaluate(x)
     elif function == "ackley":
-        # categories = list(range(-32, 33))
+        categories = list(range(-32, 33))
         # categories = list(range(-1, 2))
-        categories = list(range(-2, 3))
+        # categories = list(range(-2, 3))
         # categories = list(range(-3, 4))
         x = np.array([trial.suggest_categorical(f"x_{i}", categories) for i in range(2)])
         return objective_function.evaluate(x)
@@ -176,10 +176,6 @@ def parse_args():
 if __name__ == "__main__":
     base_script_name = os.path.splitext(__file__.split("/")[-1])[0]
     args = parse_args()
-
-    print("Helloooo")
-    logging.info("Helloooo")
-
     timestamp = args.timestamp
     results_dir = os.path.join(args.base_dir, timestamp)
     os.makedirs(results_dir, exist_ok=True)
