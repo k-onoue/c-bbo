@@ -21,6 +21,8 @@ from src.samplers.gp import GPSampler
 from src.utils_experiments import set_logger, parse_experiment_path
 
 from src.objectives.diabetes import DiabetesObjective
+from src.objectives.pressure import PressureVesselObjective
+from src.samplers.tf_continual_ablation import TFContinualAblationSampler
 
 __all__ = [
     "WarcraftObjectiveTF",
@@ -37,4 +39,6 @@ __all__ = [
     "get_map",
     "parse_experiment_path",
     "DiabetesObjective",
+    "PressureVesselObjective"
+    "TFContinualAblationSampler",
 ]

@@ -208,7 +208,7 @@ class TensorFactorization:
         reg_lambda=0.0, 
         constraint_lambda=1,
         thr=0.5,
-        severe_conv_control=False
+        severe_conv_control=True
     ):
         """
         Perform optimization for the specified decomposition method.
