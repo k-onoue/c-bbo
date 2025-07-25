@@ -448,7 +448,7 @@ class TFContinualSampler(BaseSampler):
         # Handle constraints (if any)
         if self._tensor_constraint is not None:
             
-            std_tensor[self._tensor_constraint == 0] = 1e-8
+            std_tensor[self._tensor_constraint == 0] = 0
 
         # Save for debugging
         self.mean_tensor = mean_tensor

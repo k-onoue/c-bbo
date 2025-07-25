@@ -15,8 +15,7 @@ class AckleyBenchmark:
         
         self.grid_size = self.bounds[1] - self.bounds[0] + 1
         self._tensor_constraint = None
-        if constrain:
-            self._build_constraint()
+        self._build_constraint()
 
     def _build_constraint(self) -> None:
         X, Y = np.meshgrid(
@@ -93,8 +92,7 @@ class AckleyTF:
         
         self.grid_size = self.bounds[1] - self.bounds[0] + 1
         self._tensor_constraint = None
-        if constrain:
-            self._build_constraint()
+        self._build_constraint()
 
     def _build_constraint(self) -> None:
         X, Y = np.meshgrid(
@@ -119,9 +117,25 @@ class AckleyTF:
         return sum1 + sum2 + a + np.exp(1)
 
     def evaluate(self, x):
+        """
+        与えられた点 x を評価します。
+        範囲外、次元が不正、または制約外の場合は fmax を返します。
+        """
         if not self.is_dimensionality_valid(x) or not self.is_in_bounds(x):
             return self.fmax
         
+        # ★★★ ここからが修正箇所 ★★★
+        # 制約が有効な場合 (constrain=True の場合)、制約を満たしているかチェックします。
+        if self._tensor_constraint is not None:
+            # 座標を制約グリッドのインデックスに変換
+            idx_y, idx_x = self._coord_to_index(x)
+            
+            # 制約グリッドの対応する値が 0 (制約違反) の場合、fmaxを返す
+            if not self._tensor_constraint[idx_y, idx_x]:
+                return self.fmax
+        # ★★★ ここまでが修正箇所 ★★★
+
+        # 制約を満たしている、または制約がない場合は、関数の値を計算して返す
         return self.function(x[0], x[1])
 
     def sample_violation_indices(self, num_samples: int) -> np.ndarray:

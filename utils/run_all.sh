@@ -22,7 +22,7 @@
 # sleep 2
 # bash scripts_train/run_array_launcher_train_4_diabetes.sh
 # sleep 2
-# bash scripts_train/run_array_launcher_train_4_pressure.sh
+# bash scripts_train/run_array_launcher_train_4_pressure.sh 
 # sleep 2
 # bash scripts_train/run_array_launcher_train_4_warcraft_1.sh
 # sleep 2
@@ -151,26 +151,15 @@
 # bash scripts_cp/run_array_launcher_cp_6_warcraft_2.sh
 # sleep 2
 
-bash scripts_nnmilp/run_array_launcher_nnmilp_ackley.sh
-sleep 2
-bash scripts_nnmilp/run_array_launcher_nnmilp_diabetes.sh
-sleep 2
-bash scripts_nnmilp/run_array_launcher_nnmilp_warcraft_1.sh
-sleep 2
-bash scripts_nnmilp/run_array_launcher_nnmilp_warcraft_2.sh
-sleep 2
-bash scripts_nnmilp/run_array_launcher_nnmilp_pressure.sh
-sleep 2
-
-# bash scripts_gp/run_array_launcher_gp_ackley.sh
+# bash scripts_nnmilp/run_array_launcher_nnmilp_ackley.sh
 # sleep 2
-# bash scripts_gp/run_array_launcher_gp_diabetes.sh
+# bash scripts_nnmilp/run_array_launcher_nnmilp_diabetes.sh
 # sleep 2
-# bash scripts_gp/run_array_launcher_gp_warcraft_1.sh
+# bash scripts_nnmilp/run_array_launcher_nnmilp_warcraft_1.sh
 # sleep 2
-# bash scripts_gp/run_array_launcher_gp_warcraft_2.sh
+# bash scripts_nnmilp/run_array_launcher_nnmilp_warcraft_2.sh
 # sleep 2
-# bash scripts_gp/run_array_launcher_gp_pressure.sh
+# bash scripts_nnmilp/run_array_launcher_nnmilp_pressure.sh
 # sleep 2
 
 # bash scripts_tpe/run_array_launcher_tpe_ackley.sh
@@ -181,4 +170,17 @@ sleep 2
 # sleep 2
 # bash scripts_tpe/run_array_launcher_tpe_warcraft_2.sh
 # sleep 2
-# bash scripts_tpe/run_array_launcher_tpe_pressure.sh
+bash scripts_tpe/run_array_launcher_tpe_pressure.sh
+sleep 2
+
+
+# bash scripts_gp/run_array_launcher_gp_ackley.sh
+# sleep 2
+# bash scripts_gp/run_array_launcher_gp_diabetes.sh
+# sleep 2
+# bash scripts_gp/run_array_launcher_gp_warcraft_1.sh
+# sleep 2
+# bash scripts_gp/run_array_launcher_gp_warcraft_2.sh
+# sleep 2
+bash scripts_gp/run_array_launcher_gp_pressure.sh
+sleep 2

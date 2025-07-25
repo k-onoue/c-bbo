@@ -10,7 +10,7 @@ PROJECT_ROOT=$(cd -- "$SCRIPT_DIR/../" &>/dev/null && pwd)
 # --- このランチャー実行全体で共有するタイムスタンプと保存先を定義 ---
 LAUNCH_TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 # --- 保存先のパスをプロジェクトルートからの絶対パスに変更 ---
-SAVEDIR="$PROJECT_ROOT/results_pressure_nnmilp_${LAUNCH_TIMESTAMP}"
+SAVEDIR="$PROJECT_ROOT/results_pressure_nmmilp_${LAUNCH_TIMESTAMP}"
 
 # --- 保存先ディレクトリを作成 ---
 mkdir -p "$SAVEDIR"

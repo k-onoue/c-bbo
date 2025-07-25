@@ -29,11 +29,12 @@ def objective(trial, function=None, map_shape=None, objective_function=None):
     """
     if function == "diabetes":
         categories = objective_function.features
-        x = np.array([trial.suggest_int(f"x_{category}", 0, 4) for category in categories])
+        x = np.array([trial.suggest_categorical(f"x_{i}_{category}", [0, 1, 2, 3, 4]) for i, category in enumerate(categories)])
         return objective_function(x)
 
     elif function == "pressure": # Added
-        x = np.array([trial.suggest_int(f"x_{feature}", 0, 9) for feature in objective_function.features])
+        categories = objective_function.features
+        x = np.array([trial.suggest_categorical(f"x_{i}_{feature}", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) for i, feature in enumerate(categories)])
         return objective_function(x)
 
     elif function == "eggholder":

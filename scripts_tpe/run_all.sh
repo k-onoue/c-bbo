@@ -1,0 +1,5 @@
+bash scripts_tpe/run_array_launcher_tpe_ackley.sh
+bash scripts_tpe/run_array_launcher_tpe_diabetes.sh
+bash scripts_tpe/run_array_launcher_tpe_warcraft_1.sh
+bash scripts_tpe/run_array_launcher_tpe_warcraft_2.sh
+bash scripts_tpe/run_array_launcher_tpe_pressure.sh

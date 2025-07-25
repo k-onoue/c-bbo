@@ -35,11 +35,13 @@ def objective_general(trial, function_name, map_shape=None, objective_instance=N
         return objective_instance(x)
         
     elif function_name == "diabetes":
-        x = np.array([trial.suggest_int(f"x_{category}", 0, 4) for category in objective_instance.features])
+        categories = objective_instance.features
+        x = np.array([trial.suggest_categorical(f"x_{i}_{category}", [0, 1 ,2, 3, 4]) for i, category in enumerate(categories)])
         return objective_instance(x)
 
     elif function_name == "pressure":
-        x = np.array([trial.suggest_int(f"x_{feature}", 0, 9) for feature in objective_instance.features])
+        categories = objective_instance.features
+        x = np.array([trial.suggest_categorical(f"x_{i}_{category}", [0, 1 ,2, 3, 4, 5, 6, 7, 8, 9]) for i, category in enumerate(categories)])
         return objective_instance(x)
         
     else:

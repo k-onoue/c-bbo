@@ -128,8 +128,12 @@ class PressureVesselObjective:
             目的関数の値（低いほど良い）
         """
         x_tuple = tuple(x)
-        # 制約チェック - is_constrainedがTrueの場合、制約違反には高いペナルティを科す
-        if self.is_constrained and not self._tensor_constraint[x_tuple]:
+        # # 制約チェック - is_constrainedがTrueの場合、制約違反には高いペナルティを科す
+        # if self.is_constrained and not self._tensor_constraint[x_tuple]:
+        #     # ペナルティとして、実行可能領域の最大値よりも大きな値を返す
+        #     return np.max(self._tensor_objective[self._tensor_constraint]) 
+
+        if not self._tensor_constraint[x_tuple]:
             # ペナルティとして、実行可能領域の最大値よりも大きな値を返す
             return np.max(self._tensor_objective[self._tensor_constraint]) 
         

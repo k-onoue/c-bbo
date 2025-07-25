@@ -41,6 +41,7 @@ class DiabetesObjective:
 
         # 制約テンソルの読み込み
         loaded_constraint = np.load(self.constraint_path)
+
         self._tensor_constraint = loaded_constraint['tensor']
         self.features = [f.decode('utf-8') if isinstance(f, bytes) else f for f in loaded_constraint['features']]
         
@@ -144,8 +145,11 @@ class DiabetesObjective:
         float
             目的関数の値（低いほど良い）
         """
+        # # 制約チェック - 無効な組み合わせは高いペナルティを返す
+        # if self.is_constrained and self._tensor_constraint[tuple(x)] == 0:
+        #     return 1 + 1
         # 制約チェック - 無効な組み合わせは高いペナルティを返す
-        if self.is_constrained and self._tensor_constraint[tuple(x)] == 0:
+        if not self._tensor_constraint[tuple(x)]:
             return 1 + 1
         
         # f(x)を計算: predicted_tensorから予測値を取得
@@ -160,25 +164,39 @@ class DiabetesObjective:
         
         return objective_value
 
+# def diabetes_objective(trial, diabetes_instance):
+#     """
+#     Optuna用の目的関数ラッパー
+    
+#     Parameters:
+#     -----------
+#     trial : optuna.Trial
+#         Optunaのトライアルオブジェクト
+#     diabetes_instance : Diabetes
+#         Diabetesクラスのインスタンス
+    
+#     Returns:
+#     --------
+#     float
+#         最適化する目的関数の値
+#     """
+#     _base = diabetes_instance
+#     categories = _base.features
+#     x = np.array([trial.suggest_int(f"x_{category}", 0, 4) for category in categories])
+#     return _base(x)
+
 def diabetes_objective(trial, diabetes_instance):
     """
     Optuna用の目的関数ラッパー
-    
-    Parameters:
-    -----------
-    trial : optuna.Trial
-        Optunaのトライアルオブジェクト
-    diabetes_instance : Diabetes
-        Diabetesクラスのインスタンス
-    
-    Returns:
-    --------
-    float
-        最適化する目的関数の値
     """
     _base = diabetes_instance
-    categories = _base.features
-    x = np.array([trial.suggest_int(f"x_{category}", 0, 4) for category in categories])
+
+    # サンプラーの内部処理と軸の順序を合わせるため、パラメータ名をソートする
+    sorted_categories = sorted(_base.features)
+
+    # trial.suggest_int()はすでに呼び出されているため、trial.paramsから値を取得する
+    x = np.array([trial.params[f"x_{cat}"] for cat in sorted_categories])
+    
     return _base(x)
 
 if __name__ == "__main__":
