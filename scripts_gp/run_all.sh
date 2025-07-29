@@ -1,5 +1,0 @@
-bash scripts_gp/run_array_launcher_gp_ackley.sh
-bash scripts_gp/run_array_launcher_gp_diabetes.sh
-bash scripts_gp/run_array_launcher_gp_warcraft_1.sh
-bash scripts_gp/run_array_launcher_gp_warcraft_2.sh
-bash scripts_gp/run_array_launcher_gp_pressure.sh
