@@ -19,3 +19,5 @@ data_/warcraft_evaluations/map3.npy
 temp*
 data/NATS-tss-v1_0-3ffb9-simple.tar
 data/NATS-tss-v1_0-3ffb9-simple/
+notebooks/
+scripts_*/
