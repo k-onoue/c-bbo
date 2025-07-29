@@ -33,7 +33,7 @@ sed -i "s|^project_dir = .*|project_dir = $(pwd)|" config.ini
 ├── experiments/        # Scripts and definitions for reproducing experiments
 ├── data/               # Datasets
 ├── scripts/            # Scripts to run experiments
-├── config.ini          # 
+├── config.ini          # Configuration file for paths
 ├── run_main.sh         # Shell script to run the main experiments
 ├── run_ablation.sh     # Shell script to run the ablation studies
 └── requirements.txt    # List of dependencies
