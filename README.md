@@ -8,8 +8,6 @@
 *   **OS:** Ubuntu 22.04.5 LTS
 *   **Python:** 3.12.2
 
-To get started, clone the repository and set up the virtual environment executing the following commands.
-
 ### 1.2. Installation Steps
 
 Clone the repository and set up the virtual environment by executing the following commands. The `requirements.txt` file includes all necessary libraries such as PyTorch, NumPy, cvxpy, and OR-Tools.
