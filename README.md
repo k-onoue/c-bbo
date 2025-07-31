@@ -7,6 +7,7 @@
 
 *   **OS:** Ubuntu 22.04.5 LTS
 *   **Python:** 3.12.2
+*   **Job Manager:** Slurm 23.02.3
 
 ### 1.2. Installation Steps
 
@@ -101,7 +102,6 @@ All experiments in the paper were conducted under the following specific hardwar
 - CPU: Intel Xeon Gold 6230R (4 cores allocated per run)
 - Memory: 8 GB
 - Timeout: 3600 seconds (1 hour)
-- Job Manager: Slurm 23.02.3
 
 ### 4.2 Running Experiments
 
