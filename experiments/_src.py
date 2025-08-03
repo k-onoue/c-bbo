@@ -23,6 +23,9 @@ from src.utils_experiments import set_logger, parse_experiment_path
 from src.objectives.diabetes import DiabetesObjective
 from src.objectives.pressure import PressureVesselObjective
 from src.samplers.tf_continual_ablation import TFContinualAblationSampler
+from src.objectives.gap import GAP_A_Objective, GAP_B_Objective
+from src.objectives.ising import Ising_A_Objective, Ising_B_Objective
+from src.objectives.nats import TSSObjective, SSSObjective
 
 __all__ = [
     "WarcraftObjectiveTF",
@@ -41,4 +44,10 @@ __all__ = [
     "DiabetesObjective",
     "PressureVesselObjective"
     "TFContinualAblationSampler",
+    "GAP_A_Objective",
+    "GAP_B_Objective",
+    "Ising_A_Objective",
+    "Ising_B_Objective",
+    "TSSObjective",
+    "SSSObjective"
 ]

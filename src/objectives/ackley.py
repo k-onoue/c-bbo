@@ -157,3 +157,88 @@ class AckleyTF:
 
     def is_in_bounds(self, x):
         return all(self.bounds[0] <= xi <= self.bounds[1] for xi in x)
+
+
+
+
+
+
+
+# import numpy as np
+
+
+# class AckleyTF:
+#     def __init__(
+#         self,
+#         constrain=False,
+#         problem=1
+#     ):
+#         problem_dict = {
+#             1: {
+#                 "bounds": [-1, 1],
+#                 "radius": 1,
+#             },
+#             2: {
+#                 "bounds": [-2, 2],
+#                 "radius": 2,
+#             },
+#             3: {
+#                 "bounds": [-3, 3],
+#                 "radius": 3,
+#             },
+#             4: {
+#                 "bounds": [-32, 32],
+#                 "radius": 10,
+#             },
+#         }
+#         problem = problem_dict[problem]
+#         self.bounds = problem["bounds"]
+#         self.radius = problem["radius"]
+#         self.n_dim = 2
+#         self.min = [0, 0]
+#         self.fmin = 0
+#         self.max = [32, 32]
+#         self.fmax = 22.3497
+        
+#         self.grid_size = self.bounds[1] - self.bounds[0] + 1
+#         self._tensor_constraint = None
+#         self._build_constraint()
+
+#     def _build_constraint(self) -> None:
+#         X, Y = np.meshgrid(
+#             np.arange(self.bounds[0], self.bounds[1] + 1),
+#             np.arange(self.bounds[0], self.bounds[1] + 1)
+#         )
+#         R_squared = X**2 + Y**2
+#         self._tensor_constraint = (R_squared <= self.radius**2).astype(int)
+
+# objective = AckleyTF(problem=1)
+# tensor_constraint = objective._tensor_constraint
+# print("制約を満たす点の数:", np.sum(tensor_constraint))
+# print("制約に違反する点の数:", np.sum(~tensor_constraint))
+# print("充足率:", np.sum(tensor_constraint) / tensor_constraint.size)
+# print(tensor_constraint.shape)
+
+# print()
+# objective = AckleyTF(problem=2)
+# tensor_constraint = objective._tensor_constraint
+# print("制約を満たす点の数:", np.sum(tensor_constraint))
+# print("制約に違反する点の数:", np.sum(~tensor_constraint))
+# print("充足率:", np.sum(tensor_constraint) / tensor_constraint.size)
+# print(tensor_constraint.shape)
+
+# print()
+# objective = AckleyTF(problem=3)
+# tensor_constraint = objective._tensor_constraint
+# print("制約を満たす点の数:", np.sum(tensor_constraint))
+# print("制約に違反する点の数:", np.sum(~tensor_constraint))
+# print("充足率:", np.sum(tensor_constraint) / tensor_constraint.size)
+# print(tensor_constraint.shape)
+
+# print()
+# objective = AckleyTF(problem=4)
+# tensor_constraint = objective._tensor_constraint
+# print("制約を満たす点の数:", np.sum(tensor_constraint))
+# print("制約に違反する点の数:", np.sum(~tensor_constraint))
+# print("充足率:", np.sum(tensor_constraint) / tensor_constraint.size)
+# print(tensor_constraint.shape)

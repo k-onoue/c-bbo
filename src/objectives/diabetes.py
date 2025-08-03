@@ -59,14 +59,24 @@ class DiabetesObjective:
             if not np.isnan(self._tensor_positive[idx]):
                 self._positive_indices.append(idx)
             it.iternext()
-        
-        # 開始点x'を設定
-        if start_point is None and self._positive_indices:
+
+        starting_points = np.array([[3, 3, 3, 1, 0, 1, 1, 1],
+                                    [0, 4, 2, 1, 1, 2, 0, 1],
+                                    [0, 2, 3, 0, 0, 2, 0, 2],
+                                    [2, 3, 2, 1, 0, 2, 0, 1],
+                                    [0, 2, 3, 1, 0, 2, 2, 0],
+                                    [2, 4, 3, 0, 0, 3, 0, 1],
+                                    [0, 3, 1, 1, 0, 3, 4, 0],      
+                                    [2, 4, 3, 0, 0, 1, 2, 1],
+                                    [2, 2, 2, 1, 0, 2, 0, 1],
+                                    [1, 3, 3, 1, 0, 2, 0, 0]])
+        # 開始点x'を設定``
+        if start_point is None and seed in range(10):
+            # 指定された開始点を使用
+            self._x_start = starting_points[seed]
+        elif start_point is None and self._positive_indices:
             # ランダムに陽性例から選択
             self._x_start = np.array(self._positive_indices[np.random.randint(len(self._positive_indices))])
-        elif start_point is not None:
-            # 指定された開始点を使用
-            self._x_start = np.array(start_point)
         else:
             raise ValueError("No positive samples found in the tensor and no start_point provided")
         
@@ -203,26 +213,37 @@ if __name__ == "__main__":
     import optuna
     from functools import partial
     
-    # Diabetesインスタンスの作成
-    obj = DiabetesObjective()
-    objective_with_args = partial(diabetes_objective, diabetes_instance=obj)
 
-    print(obj.sample_positive_indices(5))
+    for i in range(10):
+        # Diabetesインスタンスの作成
+        obj = DiabetesObjective(seed=i)
+
+        # tensor_constraint = obj._tensor_constraint
+        # print("制約テンソルの形状:", tensor_constraint.shape)
+        # print("制約を満たす点の数:", np.sum(tensor_constraint))
+        # print("制約に違反する点の数:", np.sum(~tensor_constraint))
+        # print("充足率:", np.sum(tensor_constraint) / tensor_constraint.size)
+
+        print(obj._x_start)
+
+    # objective_with_args = partial(diabetes_objective, diabetes_instance=obj)
+
+    # print(obj.sample_positive_indices(5))
 
     
-    # Optunaによる最適化
-    study = optuna.create_study(direction="minimize")
-    study.optimize(objective_with_args, n_trials=5)
+    # # Optunaによる最適化
+    # study = optuna.create_study(direction="minimize")
+    # study.optimize(objective_with_args, n_trials=5)
     
-    # 最適値の表示
-    best_params = study.best_params
-    best_x = np.array([best_params[f"x_{feature}"] for feature in obj.features])
+    # # 最適値の表示
+    # best_params = study.best_params
+    # best_x = np.array([best_params[f"x_{feature}"] for feature in obj.features])
     
-    print("\n最適化結果:")
-    print(f"開始点: {obj._x_start}")
-    print(f"最適点: {best_x}")
-    print(f"最適点の予測値: {obj._tensor_predicted[tuple(best_x)]:.4f}")
-    print(f"開始点からの変化: {best_x - obj._x_start}")
-    print(f"目的関数値: {study.best_value:.4f}")
+    # print("\n最適化結果:")
+    # print(f"開始点: {obj._x_start}")
+    # print(f"最適点: {best_x}")
+    # print(f"最適点の予測値: {obj._tensor_predicted[tuple(best_x)]:.4f}")
+    # print(f"開始点からの変化: {best_x - obj._x_start}")
+    # print(f"目的関数値: {study.best_value:.4f}")
 
-    # optuna.visualization.plot_optimization_history(study).show()
+    # # optuna.visualization.plot_optimization_history(study).show()

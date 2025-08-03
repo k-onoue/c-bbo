@@ -153,3 +153,15 @@ class PressureVesselObjective:
     def sample_violation_path(self, num_samples: int = 200) -> list[tuple[int, int]]:
         random_indices = self.sample_violation_indices(num_samples)
         return [tuple(self._index_to_coord(idx)) for idx in random_indices]
+
+
+
+if __name__ == "__main__":
+    # テスト用のサンプルコード
+    objective = PressureVesselObjective()
+    
+    tensor_constraint = objective._tensor_constraint
+    print("制約を満たす点の数:", np.sum(tensor_constraint))
+    print("制約に違反する点の数:", np.sum(~tensor_constraint))
+    print("充足率:", np.sum(tensor_constraint) / tensor_constraint.size)
+    print(tensor_constraint.shape)

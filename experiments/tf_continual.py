@@ -19,9 +19,75 @@ from _src import (
     ConstraintWarcraft, 
     WarcraftObjectiveTF as WarcraftObjective, 
     EggholderTF as Eggholder, 
-    AckleyTF as Ackley
+    AckleyTF as Ackley,
+    GAP_A_Objective,
+    GAP_B_Objective,
+    Ising_A_Objective,
+    Ising_B_Objective,
+    TSSObjective,
+    SSSObjective
 )
 
+
+# def objective(trial, function=None, map_shape=None, objective_function=None):
+#     """
+#     Unified objective function for Optuna optimization.
+#     """
+#     if function == "diabetes":
+#         categories = objective_function.features
+#         x = np.array([trial.suggest_categorical(f"x_{i}_{category}", [0, 1, 2, 3, 4]) for i, category in enumerate(categories)])
+#         return objective_function(x)
+
+#     elif function == "pressure": # Added
+#         categories = objective_function.features
+#         x = np.array([trial.suggest_categorical(f"x_{i}_{feature}", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) for i, feature in enumerate(categories)])
+#         return objective_function(x)
+
+#     elif function == "eggholder":
+#         categories = list(range(-100, 100))
+#         x = np.array([trial.suggest_categorical(f"x_{i}", categories) for i in range(2)])
+#         return objective_function.evaluate(x)
+        
+#     elif function == "ackley":
+#         categories = list(range(-32, 33))
+#         x = np.array([trial.suggest_categorical(f"x_{i}", categories) for i in range(2)])
+#         return objective_function.evaluate(x)
+        
+#     elif function == "warcraft":
+#         directions = ["oo", "ab", "ac", "ad", "bc", "bd", "cd"]
+#         x = np.empty(map_shape, dtype=object)
+#         for i in range(map_shape[0]):
+#             for j in range(map_shape[1]):
+#                 x[i, j] = trial.suggest_categorical(f"x_{i}_{j}", directions)
+#         return objective_function(x)
+    
+#     elif function in ["gap_a", "gap_b"]:
+#         features = objective_function.features
+#         choices = list(range(objective_function.n_bins))
+#         x_list = [trial.suggest_categorical(f'x_{name}', choices) for name in features]
+#         x = np.array(x_list)
+#         return objective_function(x)
+
+#     elif function in ["ising_a", "ising_b"]:
+#         features = objective_function.features
+#         choices = [0, 1]
+#         x_list = [trial.suggest_categorical(f'x_{name}', choices) for name in features]
+#         x = np.array(x_list)
+#         return objective_function(x)
+
+#     elif function == "tss":
+#         operations = objective_function.operations
+#         arch_ops = [trial.suggest_categorical(f'x_edge_{i}', operations) for i in range(6)]
+#         return objective_function(arch_ops)
+
+#     elif function == "sss":
+#         features = objective_function.features
+#         channel_options = objective_function.channel_options
+#         arch_channels = [trial.suggest_categorical(f'x_{name}', channel_options) for name in features]
+#         return objective_function(arch_channels)
+        
+#     else:
+#         raise ValueError(f"Unsupported function type: {function}")
 
 def objective(trial, function=None, map_shape=None, objective_function=None):
     """
@@ -29,12 +95,14 @@ def objective(trial, function=None, map_shape=None, objective_function=None):
     """
     if function == "diabetes":
         categories = objective_function.features
-        x = np.array([trial.suggest_categorical(f"x_{i}_{category}", [0, 1, 2, 3, 4]) for i, category in enumerate(categories)])
+        # この形式は問題ないが、統一性のために "x_i" 形式が望ましい
+        x = np.array([trial.suggest_categorical(f"x_{i}", [0, 1, 2, 3, 4]) for i in range(len(categories))])
         return objective_function(x)
 
     elif function == "pressure": # Added
         categories = objective_function.features
-        x = np.array([trial.suggest_categorical(f"x_{i}_{feature}", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) for i, feature in enumerate(categories)])
+        # この形式は問題ないが、統一性のために "x_i" 形式が望ましい
+        x = np.array([trial.suggest_categorical(f"x_{i}", list(range(10))) for i in range(len(categories))])
         return objective_function(x)
 
     elif function == "eggholder":
@@ -52,12 +120,54 @@ def objective(trial, function=None, map_shape=None, objective_function=None):
         x = np.empty(map_shape, dtype=object)
         for i in range(map_shape[0]):
             for j in range(map_shape[1]):
-                x[i, j] = trial.suggest_categorical(f"x_{i}_{j}", directions)
+                # 2次元のインデックスを1次元に変換して命名
+                idx = i * map_shape[1] + j
+                x[i, j] = trial.suggest_categorical(f"x_{idx}", directions)
         return objective_function(x)
+    
+    elif function in ["gap_a", "gap_b"]:
+        features = objective_function.features
+        n_features = len(features)
+        # パディング幅を計算 (例: 100個なら最大99で2桁、1000個なら最大999で3桁)
+        pad_width = len(str(n_features - 1))
+        choices = list(range(objective_function.n_bins))
         
+        x_list = [trial.suggest_categorical(f'x_{str(i).zfill(pad_width)}', choices) for i in range(n_features)]
+        x = np.array(x_list)
+        return objective_function(x)
+
+    elif function in ["ising_a", "ising_b"]:
+        features = objective_function.features
+        n_features = len(features)
+        # パディング幅を計算
+        pad_width = len(str(n_features - 1)) 
+        choices = [0, 1]
+        
+        x_list = [trial.suggest_categorical(f'x_{str(i).zfill(pad_width)}', choices) for i in range(n_features)]
+        x = np.array(x_list)
+        return objective_function(x)
+
+    elif function == "tss":
+        operations = objective_function.operations
+        # このブロックは変数が6個 (x_0~x_5) なので、ソート順の問題は起きません。
+        # したがって、修正は不要です。
+        arch_ops = [trial.suggest_categorical(f'x_{i}', operations) for i in range(6)]
+        return objective_function(arch_ops)
+
+    elif function == "sss":
+        features = objective_function.features
+        n_features = len(features)
+        # パディング幅を計算
+        pad_width = len(str(n_features - 1))
+        channel_options = objective_function.channel_options
+        
+        arch_channels = [trial.suggest_categorical(f'x_{str(i).zfill(pad_width)}', channel_options) for i in range(n_features)]
+        return objective_function(arch_channels)
+        
+    # ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+
     else:
         raise ValueError(f"Unsupported function type: {function}")
-    
 
 def run_bo(settings):
     """
@@ -95,6 +205,38 @@ def run_bo(settings):
         ObjectiveClass = Eggholder if function == "eggholder" else Ackley
         objective_function = ObjectiveClass(constrain=settings["constraint"])
         tensor_constraint = objective_function._tensor_constraint if settings["constraint"] else None
+        objective_with_args = partial(objective, function=function, objective_function=objective_function)
+
+    elif function == "gap_a":
+        objective_function = GAP_A_Objective()
+        tensor_constraint = objective_function._tensor_constraint
+        objective_with_args = partial(objective, function=function, objective_function=objective_function)
+        
+    elif function == "gap_b":
+        objective_function = GAP_B_Objective()
+        tensor_constraint = objective_function._tensor_constraint
+        objective_with_args = partial(objective, function=function, objective_function=objective_function)
+
+    elif function == "ising_a":
+        objective_function = Ising_A_Objective()
+        tensor_constraint = objective_function._tensor_constraint
+        objective_with_args = partial(objective, function=function, objective_function=objective_function)
+        
+    elif function == "ising_b":
+        objective_function = Ising_B_Objective()
+        tensor_constraint = objective_function._tensor_constraint
+        objective_with_args = partial(objective, function=function, objective_function=objective_function)
+
+    elif function == "tss":
+        # is_constrained=Trueで制約を有効化
+        objective_function = TSSObjective(is_constrained=settings["constraint"])
+        tensor_constraint = objective_function._tensor_constraint
+        objective_with_args = partial(objective, function=function, objective_function=objective_function)
+        
+    elif function == "sss":
+        # is_constrained=Trueで制約を有効化
+        objective_function = SSSObjective(is_constrained=settings["constraint"])
+        tensor_constraint = objective_function._tensor_constraint
         objective_with_args = partial(objective, function=function, objective_function=objective_function)
         
     else:
@@ -176,7 +318,12 @@ def parse_args():
     parser.add_argument("--timestamp", type=str, help="Timestamp for the experiment")
     parser.add_argument("--seed", type=int, default=0, help="Random seed")
     parser.add_argument("--iter_bo", type=int, default=300, help="Number of BO iterations")
-    parser.add_argument("--function", type=str, required=True, choices=["diabetes", "pressure", "warcraft", "eggholder", "ackley"], help="Objective function to run.")
+    parser.add_argument("--function", type=str, required=True, 
+                        choices=[
+                            "diabetes", "pressure", "warcraft", "eggholder", "ackley",
+                            "gap_a", "gap_b", "ising_a", "ising_b", "tss", "sss"
+                        ], 
+                        help="Objective function to run.")
     parser.add_argument("--constraint", action="store_true", help="Use constraint in the objective function")
     parser.add_argument("--direction", action="store_true", help="Maximize the objective function")
 

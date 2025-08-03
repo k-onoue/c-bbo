@@ -11,7 +11,6 @@ from optuna.trial import TrialState
 from scipy.stats import norm
 from scipy.stats import t
 
-
 from ..tensor_factorization_continual import TensorFactorization
 
 
@@ -33,7 +32,8 @@ class TFContinualSampler(BaseSampler):
         self.seed = seed
         self.rng = np.random.RandomState(seed)
         random.seed(seed)
-        torch.manual_seed(seed)
+        if seed is not None:
+            torch.manual_seed(seed)
 
         # Device and dtype
         if torch_device is None:
@@ -123,14 +123,24 @@ class TFContinualSampler(BaseSampler):
         if self._param_names is None:
             self._initialize_internal_structure(search_space, study)
 
-        # Build tensor from past trials
         self._update_tensor(study)
 
-        # Perform decomposition and suggest next parameter set
         mean_tensor, std_tensor = self._fit(
             self._tensor_eval,
             self._tensor_eval_bool
         )
+
+        # # Logging for debugging (operates on the [0, 1] normalized scale)
+        # mean_max = np.max(mean_tensor)
+        # mean_max_idx = tuple(int(i) for i in np.unravel_index(np.argmax(mean_tensor), mean_tensor.shape))
+        # mean_min = np.min(mean_tensor)
+        # mean_min_idx = tuple(int(i) for i in np.unravel_index(np.argmin(mean_tensor), mean_tensor.shape))
+        # std_max = np.max(std_tensor)
+        # std_idx = tuple(int(i) for i in np.unravel_index(np.argmax(std_tensor), std_tensor.shape))
+
+        # logging.info(f"Normalized mean max: {mean_max:.4f}, index: {mean_max_idx}, min: {mean_min:.4f}, index: {mean_min_idx}")
+        # logging.info(f"Normalized std max: {std_max:.4f}, index: {std_idx}")
+
 
         # Update Loss History
         prev_len = len(self.loss_history["trial"])
@@ -165,7 +175,20 @@ class TFContinualSampler(BaseSampler):
 
         next_index = next_indices[0]
 
-        # Convert indices back to parameter values
+        # <<< ここから追加 >>>
+        # 制約を満たしているか確認してログに出力
+        if self._tensor_constraint is not None:
+            is_feasible = (self._tensor_constraint[next_index] == 1)
+            if not is_feasible:
+                logging.info(f"Constraint check for suggested point: Index={next_index}, Feasible={is_feasible}")  
+        else:
+            # 制約テンソルが提供されていない場合は常にTrueとみなす
+            logging.info(f"Constraint check for suggested point: Index={next_index}, Feasible=True (No constraint provided)")
+        # <<< ここまで追加 >>>
+
+        logging.info(f"next_index: {next_index}")
+        logging.info(f"param_names: {self._param_names}")
+
         params = {}
         for i, param_name in enumerate(self._param_names):
             category_index = next_index[i]
@@ -228,20 +251,11 @@ class TFContinualSampler(BaseSampler):
         tensor_eval: np.ndarray,
         tensor_eval_bool: np.ndarray
     ) -> tuple[np.ndarray, np.ndarray]:
-        """
-        The main routine that repeatedly decomposes the tensor (decomp_iter_num times) and
-        aggregates the results into mean_tensor and std_tensor.
-        """
+
         eval_mean, eval_std = self._calculate_eval_stats(tensor_eval)
-
-        random_tensor = np.random.uniform(0, 1, size=tensor_eval.shape)
-
-        # We'll build up multiple reconstructions:
         tensors_list = []
 
         for tf_index in range(self.decomp_iter_num):
-
-            # Perform the decomposition for iteration i
             decomposed_tensor = self._decompose_with_optional_mask(
                 tensor_eval=tensor_eval,
                 tensor_eval_bool=tensor_eval_bool,
@@ -249,12 +263,9 @@ class TFContinualSampler(BaseSampler):
                 eval_std=eval_std,
                 maximize=self._maximize,
                 tf_index=tf_index,
-                random_tensor=random_tensor,
             )
-
             tensors_list.append(decomposed_tensor)
 
-        # After collecting all reconstructions, compute final mean/std
         return self._calculate_mean_std_tensors(
             tensors_list,
             tensor_eval,
@@ -264,14 +275,21 @@ class TFContinualSampler(BaseSampler):
     def _calculate_eval_stats(
         self, tensor_eval: np.ndarray
     ) -> tuple[float, float]:
-        eval_copy = np.copy(tensor_eval)
-        # Filter with constraint if available
-        if self._tensor_constraint is not None:
-            eval_copy[self._tensor_constraint == 0] = np.nan
+        """
+        [修正済み]
+        観測された全ての有限な値から統計量を計算する。
+        これにより、初期に実行不可能な点のみが観測されても学習が破綻しない。
+        """
+        finite_values = tensor_eval[np.isfinite(tensor_eval)]
 
-        finite_values = eval_copy[np.isfinite(eval_copy)]
+        if len(finite_values) == 0:
+            return 0.0, 1.0  # 観測値がなければデフォルト値を返す
+
         mean_ = np.nanmean(finite_values)
         std_ = np.nanstd(finite_values)
+
+        if std_ < 1e-8:
+            std_ = 1.0  # 観測値が全て同じ場合、標準偏差を1にしてゼロ除算を防ぐ
 
         return (mean_, std_)
 
@@ -280,17 +298,18 @@ class TFContinualSampler(BaseSampler):
     ) -> np.ndarray:
         # If we have a tensor_constraint, only consider entries where constraint == 1
         if self._tensor_constraint is not None:
+            # マスク候補は、制約を満たす点のみ
             constrained_indices = np.argwhere(self._tensor_constraint == 1)
 
             if self.include_observed_points:
-                cand_indices = np.indices(tensor_shape).reshape(len(tensor_shape), -1).T
+                cand_indices_base = np.indices(tensor_shape).reshape(len(tensor_shape), -1).T
             else:
-                cand_indices = np.argwhere(tensor_eval_bool == False)
+                cand_indices_base = np.argwhere(tensor_eval_bool == False)
 
-            # Intersect the constrained indices with the candidate indices
+            # 候補点と制約を満たす点の積集合を取る
             constrained_indices_set = set(map(tuple, constrained_indices))
             cand_indices = np.array([
-                idx for idx in cand_indices if tuple(idx) in constrained_indices_set
+                idx for idx in cand_indices_base if tuple(idx) in constrained_indices_set
             ])
         else:
             if self.include_observed_points:
@@ -298,20 +317,21 @@ class TFContinualSampler(BaseSampler):
             else:
                 cand_indices = np.argwhere(tensor_eval_bool == False)
 
-        # Determine the mask size
-        # mask_size = max(1, int(len(cand_indices) * self.mask_ratio))
-        mask_size = max(0, int(len(cand_indices) * self.mask_ratio))
+        if len(cand_indices) == 0:
+            return np.array([], dtype=int)
 
-        # Select mask indices randomly
-        selected_indices = self.rng.choice(len(cand_indices), mask_size, replace=False)
-        return cand_indices[selected_indices]
+        mask_size = max(0, int(len(cand_indices) * self.mask_ratio))
+        selected_indices_pos = self.rng.choice(len(cand_indices), mask_size, replace=False)
+        return cand_indices[selected_indices_pos]
 
     def _create_mask_tensor(
         self, tensor_shape: tuple, mask_indices: np.ndarray
     ) -> np.ndarray:
         mask_tensor = np.ones(tensor_shape, dtype=bool)
-        for mask_index in mask_indices:
-            mask_tensor[tuple(mask_index)] = False
+        if mask_indices.size > 0:
+            # NumPyの高度なインデックス付けを使用して高速化
+            mask_indices_tuple = tuple(mask_indices.T)
+            mask_tensor[mask_indices_tuple] = False
         return mask_tensor
 
     def _decompose_with_optional_mask(
@@ -322,61 +342,40 @@ class TFContinualSampler(BaseSampler):
         eval_std: float,
         maximize: bool,
         tf_index: int = None,
-        random_tensor = None,
     ) -> np.ndarray:
-        """
-        Create a masked tensor (if needed), initialize or load from prev_state,
-        do factorization, return the reconstructed tensor as a NumPy array.
-
-        If you want to store factor parameters for continual learning, you can:
-          - Modify TensorFactorization to return its factors in e.g. a get_state() method,
-          - Return (reconstructed_tensor, factor_params) here,
-          - Save factor_params to self._model_states[tf_index].
-        """
-        # # Standardize
-        # standardized_tensor_eval = (tensor_eval - eval_mean) / (eval_std + 1e-8)
-        # standardized_tensor_eval[~tensor_eval_bool] = np.nan  # unobserved
-
-        # Calculate nanmin and nanmax once and store them in variables
+        
         tensor_min = np.nanmin(tensor_eval)
         tensor_max = np.nanmax(tensor_eval)
 
-        # Normalize tensor_eval with a fallback to 0.5 when all values are the same
-        if tensor_min == tensor_max:
+        if tensor_min == tensor_max or np.isnan(tensor_min):
             normalized_tensor_eval = np.full_like(tensor_eval, 0.5)
-            threshold = 0.5
         else:
             normalized_tensor_eval = (tensor_eval - tensor_min) / (tensor_max - tensor_min)
-            
-            if maximize:
-                threshold = 0
-            else:
-                threshold = 1
         
-        normalized_tensor_eval[~tensor_eval_bool] = np.nan  # unobserved
+        normalized_tensor_eval[~tensor_eval_bool] = np.nan
 
-        # Create mask if needed
-        if self.mask_ratio != 0:
-            mask_indices = self._select_mask_indices(tensor_eval.shape, tensor_eval_bool)
-            mask_tensor = self._create_mask_tensor(tensor_eval.shape, mask_indices)
-        else:
-            mask_tensor = self._create_mask_tensor(tensor_eval.shape, [])
+        # この設計思想の核心部分
+        # 最小化問題: threshold=1 (悪い値)
+        # 最大化問題: threshold=0 (悪い値)
+        # 制約違反の点は、この「悪い値」に近づくように学習される
+        threshold = 1.0 if not maximize else 0.0
+        if tensor_min == tensor_max:
+            threshold = 0.5
 
-        mask_tensor = np.logical_or(mask_tensor, self._tensor_constraint == 0)
+        # Create mask for unobserved points within the feasible region
+        mask_indices = self._select_mask_indices(tensor_eval.shape, tensor_eval_bool)
+        mask_tensor = self._create_mask_tensor(tensor_eval.shape, mask_indices)
 
-        # Initialize values
-        # init_tensor_eval = self.rng.normal(0, 1, tensor_eval.shape)
+        # Intentionally UN-MASK infeasible points.
+        # This forces the model to learn their values, guided by the constraint loss.
+        if self._tensor_constraint is not None:
+            mask_tensor = np.logical_or(mask_tensor, self._tensor_constraint == 0)
+
         init_tensor_eval = self.rng.uniform(0, 1, tensor_eval.shape)
 
-        if self._tensor_constraint is not None:
-            condition = np.logical_and(tensor_eval_bool, self._tensor_constraint)
-        else:
-            condition = tensor_eval_bool
+        # Fill known values
+        init_tensor_eval[tensor_eval_bool] = normalized_tensor_eval[tensor_eval_bool]
 
-        # init_tensor_eval[condition] = standardized_tensor_eval[condition]
-        init_tensor_eval[condition] = normalized_tensor_eval[condition]
-
-        # Convert to Torch
         constraint = None
         if self._tensor_constraint is not None:
             constraint = torch.tensor(self._tensor_constraint, dtype=self.torch_dtype)
@@ -391,7 +390,7 @@ class TFContinualSampler(BaseSampler):
             constraint=constraint,
             is_maximize_c=maximize,
             device=self.torch_device,
-            prev_state=prev_state,  # pass the previously saved factors
+            prev_state=prev_state,
         )
 
         tf.optimize(
@@ -406,18 +405,14 @@ class TFContinualSampler(BaseSampler):
             severe_conv_control=True,
         )
 
+        # Record loss history
         _epoch = tf.loss_history["epoch"]
-        _total = tf.loss_history["total"]
-        _mse = tf.loss_history["mse"]
-        _constraint = tf.loss_history["constraint"]
-        _l2 = tf.loss_history["l2"]
-        
         self.loss_history["tf_index"].extend([tf_index] * len(_epoch))
         self.loss_history["epoch"].extend(_epoch)
-        self.loss_history["total"].extend(_total)
-        self.loss_history["mse"].extend(_mse)
-        self.loss_history["constraint"].extend(_constraint)
-        self.loss_history["l2"].extend(_l2)
+        self.loss_history["total"].extend(tf.loss_history["total"])
+        self.loss_history["mse"].extend(tf.loss_history["mse"])
+        self.loss_history["constraint"].extend(tf.loss_history["constraint"])
+        self.loss_history["l2"].extend(tf.loss_history["l2"])
      
         if self.method == "tucker":
             self._model_states[tf_index] = (tf.core, tf.factors)
@@ -434,23 +429,28 @@ class TFContinualSampler(BaseSampler):
         tensor_eval_bool: np.ndarray
     ) -> tuple[np.ndarray, np.ndarray]:
         """
-        Combine all decomposed tensors in tensors_list into mean/std arrays,
-        then re-insert known values for observed points, and handle constraints.
+        [修正済み]
+        全ての計算を一貫して正規化後の[0, 1]スケールで行う。
+        観測済みの点も正規化された値で上書きすることで、スケールの不整合を防ぐ。
         """
         tensors_stack = np.stack(tensors_list)
         mean_tensor = np.mean(tensors_stack, axis=0)
-        std_tensor = np.std(tensors_stack, axis=0)
         std_tensor = np.std(tensors_stack, axis=0, ddof=1)
 
-        mean_tensor[tensor_eval_bool] = tensor_eval[tensor_eval_bool]
-        std_tensor[tensor_eval_bool] = 1e-8  # small value for observed points
+        tensor_min = np.nanmin(tensor_eval)
+        tensor_max = np.nanmax(tensor_eval)
+        
+        if tensor_min != tensor_max and not np.isnan(tensor_min):
+            normalized_eval = (tensor_eval - tensor_min) / (tensor_max - tensor_min)
+            mean_tensor[tensor_eval_bool] = normalized_eval[tensor_eval_bool]
+        else:
+            mean_tensor[tensor_eval_bool] = 0.5
+        
+        std_tensor[tensor_eval_bool] = 1e-8
 
-        # Handle constraints (if any)
         if self._tensor_constraint is not None:
-            
-            std_tensor[self._tensor_constraint == 0] = 0
+            std_tensor[self._tensor_constraint == 0] = 0.0
 
-        # Save for debugging
         self.mean_tensor = mean_tensor
         self.std_tensor = std_tensor
 
@@ -464,22 +464,17 @@ class TFContinualSampler(BaseSampler):
         batch_size: int,
         maximize: bool,
     ) -> list[tuple[int, ...]]:
-        def _ucb(mean_tensor, std_tensor, trade_off_param, maximize=True) -> np.ndarray:
-            if maximize:
-                return mean_tensor + trade_off_param * std_tensor
-            else:
-                return -mean_tensor + trade_off_param * std_tensor
-
-        ucb_values = _ucb(mean_tensor, std_tensor, trade_off_param, maximize)
+        if maximize:
+            ucb_values = mean_tensor + trade_off_param * std_tensor
+        else:
+            ucb_values = -mean_tensor + trade_off_param * std_tensor
 
         if self.unique_sampling:
-            ucb_values[self._tensor_eval_bool == True] = -np.inf if maximize else np.inf
+            ucb_values[self._tensor_eval_bool] = -np.inf
 
-        # Get indices of top UCB values
-        flat_indices = np.argsort(ucb_values.flatten())[::-1]  # descending
+        flat_indices = np.argsort(ucb_values.flatten())[::-1]
         top_indices = np.unravel_index(flat_indices[:batch_size], ucb_values.shape)
-        top_indices = list(zip(*top_indices))
-        return top_indices
+        return list(zip(*top_indices))
 
     def _suggest_ei_candidates(
         self,
@@ -488,48 +483,50 @@ class TFContinualSampler(BaseSampler):
         batch_size: int,
         maximize: bool,
     ) -> list[tuple[int, ...]]:
+        """
+        [修正済み]
+        f_best（最良の目的関数値）を正規化後の[0, 1]スケールで定義する。
+        """
+        std_tensor_clipped = np.clip(std_tensor, 1e-9, None)
 
-        def _ei(mean_tensor, std_tensor, f_best, maximize=True) -> np.ndarray:
-            std_tensor = np.clip(std_tensor, 1e-9, None)
-            if maximize:
-                z = (mean_tensor - f_best) / std_tensor
-            else:
-                z = (f_best - mean_tensor) / std_tensor
+        # Define f_best in the normalized [0, 1] scale
+        if maximize:
+            f_best = 1.0  # Best possible value for maximization is 1
+        else:
+            f_best = 0.0  # Best possible value for minimization is 0
 
-            if self.acqf_dist == "n":
-                ei_values = std_tensor * (z * norm.cdf(z) + norm.pdf(z))
-            elif self.acqf_dist == "t1":
-                n = np.sum(self._tensor_eval_bool)
-                n = n if n > 1 else 2
-                ei_values = std_tensor * (z * t.cdf(z, df=n-1) + t.pdf(z, df=n-1))
-            elif self.acqf_dist == "t2":
-                n = 10 # decomp iter num
-                ei_values = std_tensor * (z * t.cdf(z, df=n-1) + t.pdf(z, df=n-1))
-            else:
-                raise ValueError("acqf_dist must be 'n', 't1', or 't2'.")
-
-            return ei_values
-
+        # Edge case: if no valid observations yet, or all are the same.
         tensor_min = np.nanmin(self._tensor_eval)
         tensor_max = np.nanmax(self._tensor_eval)
+        if np.isnan(tensor_min) or tensor_min == tensor_max:
+            f_best = 0.5 # If uncertain, aim for the middle
 
-        if tensor_min == tensor_max:
-            f_best = 0.5
+        if maximize:
+            z = (mean_tensor - f_best) / std_tensor_clipped
         else:
-            if maximize:
-                f_best = 1
-            else:
-                f_best = 0
+            z = (f_best - mean_tensor) / std_tensor_clipped
 
-        ei_values = _ei(mean_tensor, std_tensor, f_best, maximize)
+        # Select distribution for EI calculation
+        if self.acqf_dist == "n":
+            dist = norm
+            ei_values = std_tensor_clipped * (z * dist.cdf(z) + dist.pdf(z))
+        else:
+            if self.acqf_dist == "t1":
+                n = np.sum(self._tensor_eval_bool)
+                df = max(1, n - 1)
+            elif self.acqf_dist == "t2":
+                df = max(1, self.decomp_iter_num - 1)
+            else:
+                raise ValueError("acqf_dist must be 'n', 't1', or 't2'.")
+            dist = t(df=df)
+            ei_values = std_tensor_clipped * (z * dist.cdf(z) + dist.pdf(z))
 
         if self.unique_sampling:
-            ei_values[self._tensor_eval_bool == True] = -np.inf if maximize else np.inf
+            ei_values[self._tensor_eval_bool] = -np.inf
 
-        flat_indices = np.argsort(ei_values.flatten())[::-1]  # descending
+        flat_indices = np.argsort(ei_values.flatten())[::-1]
         top_indices = np.unravel_index(flat_indices[:batch_size], ei_values.shape)
-        top_indices = list(zip(*top_indices))
-        return top_indices
+        return list(zip(*top_indices))
 
     def _suggest_ts_candidates(
         self,
@@ -538,22 +535,26 @@ class TFContinualSampler(BaseSampler):
         batch_size: int,
         maximize: bool,
     ) -> list[tuple[int, ...]]:
-        """
-        Thompson Sampling approach can be more involved, but here is a naive version
-        using mean + std (for maximize) or -(mean - std) (for minimize).
-        """
-        def _ts(mean_tensor, std_tensor, maximize=True) -> np.ndarray:
-            if maximize:
-                return mean_tensor + std_tensor
-            else:
-                return -mean_tensor + std_tensor
-
-        ts_values = _ts(mean_tensor, std_tensor, maximize)
+        
+        # Sample from the posterior distribution
+        if self.acqf_dist == "n":
+            sampled_values = self.rng.normal(mean_tensor, std_tensor)
+        else: # t-distribution
+            if self.acqf_dist == "t1":
+                n = np.sum(self._tensor_eval_bool)
+                df = max(1, n - 1)
+            else: # t2
+                df = max(1, self.decomp_iter_num - 1)
+            # scale parameter for t-distribution is std
+            sampled_values = self.rng.standard_t(df, size=mean_tensor.shape) * std_tensor + mean_tensor
 
         if self.unique_sampling:
-            ts_values[self._tensor_eval_bool == True] = -np.inf if maximize else np.inf
+            sampled_values[self._tensor_eval_bool] = -np.inf if maximize else np.inf
 
-        flat_indices = np.argsort(ts_values.flatten())[::-1]  # descending
-        top_indices = np.unravel_index(flat_indices[:batch_size], ts_values.shape)
-        top_indices = list(zip(*top_indices))
-        return top_indices
+        if maximize:
+            flat_indices = np.argsort(sampled_values.flatten())[::-1]
+        else:
+            flat_indices = np.argsort(sampled_values.flatten())
+
+        top_indices = np.unravel_index(flat_indices[:batch_size], sampled_values.shape)
+        return list(zip(*top_indices))
