@@ -175,20 +175,6 @@ class TFContinualSampler(BaseSampler):
 
         next_index = next_indices[0]
 
-        # <<< ここから追加 >>>
-        # 制約を満たしているか確認してログに出力
-        if self._tensor_constraint is not None:
-            is_feasible = (self._tensor_constraint[next_index] == 1)
-            if not is_feasible:
-                logging.info(f"Constraint check for suggested point: Index={next_index}, Feasible={is_feasible}")  
-        else:
-            # 制約テンソルが提供されていない場合は常にTrueとみなす
-            logging.info(f"Constraint check for suggested point: Index={next_index}, Feasible=True (No constraint provided)")
-        # <<< ここまで追加 >>>
-
-        logging.info(f"next_index: {next_index}")
-        logging.info(f"param_names: {self._param_names}")
-
         params = {}
         for i, param_name in enumerate(self._param_names):
             category_index = next_index[i]

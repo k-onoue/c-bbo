@@ -28,67 +28,6 @@ from _src import (
     SSSObjective
 )
 
-
-# def objective(trial, function=None, map_shape=None, objective_function=None):
-#     """
-#     Unified objective function for Optuna optimization.
-#     """
-#     if function == "diabetes":
-#         categories = objective_function.features
-#         x = np.array([trial.suggest_categorical(f"x_{i}_{category}", [0, 1, 2, 3, 4]) for i, category in enumerate(categories)])
-#         return objective_function(x)
-
-#     elif function == "pressure": # Added
-#         categories = objective_function.features
-#         x = np.array([trial.suggest_categorical(f"x_{i}_{feature}", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) for i, feature in enumerate(categories)])
-#         return objective_function(x)
-
-#     elif function == "eggholder":
-#         categories = list(range(-100, 100))
-#         x = np.array([trial.suggest_categorical(f"x_{i}", categories) for i in range(2)])
-#         return objective_function.evaluate(x)
-        
-#     elif function == "ackley":
-#         categories = list(range(-32, 33))
-#         x = np.array([trial.suggest_categorical(f"x_{i}", categories) for i in range(2)])
-#         return objective_function.evaluate(x)
-        
-#     elif function == "warcraft":
-#         directions = ["oo", "ab", "ac", "ad", "bc", "bd", "cd"]
-#         x = np.empty(map_shape, dtype=object)
-#         for i in range(map_shape[0]):
-#             for j in range(map_shape[1]):
-#                 x[i, j] = trial.suggest_categorical(f"x_{i}_{j}", directions)
-#         return objective_function(x)
-    
-#     elif function in ["gap_a", "gap_b"]:
-#         features = objective_function.features
-#         choices = list(range(objective_function.n_bins))
-#         x_list = [trial.suggest_categorical(f'x_{name}', choices) for name in features]
-#         x = np.array(x_list)
-#         return objective_function(x)
-
-#     elif function in ["ising_a", "ising_b"]:
-#         features = objective_function.features
-#         choices = [0, 1]
-#         x_list = [trial.suggest_categorical(f'x_{name}', choices) for name in features]
-#         x = np.array(x_list)
-#         return objective_function(x)
-
-#     elif function == "tss":
-#         operations = objective_function.operations
-#         arch_ops = [trial.suggest_categorical(f'x_edge_{i}', operations) for i in range(6)]
-#         return objective_function(arch_ops)
-
-#     elif function == "sss":
-#         features = objective_function.features
-#         channel_options = objective_function.channel_options
-#         arch_channels = [trial.suggest_categorical(f'x_{name}', channel_options) for name in features]
-#         return objective_function(arch_channels)
-        
-#     else:
-#         raise ValueError(f"Unsupported function type: {function}")
-
 def objective(trial, function=None, map_shape=None, objective_function=None):
     """
     Unified objective function for Optuna optimization.

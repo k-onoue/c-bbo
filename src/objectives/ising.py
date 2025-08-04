@@ -61,13 +61,8 @@ class Ising_A_Objective:
         print(f"Constraint tensor created. Feasible points: {np.sum(tensor_constraint)} / {tensor_constraint.size}")
         return tensor_constraint
 
-# ===================================================================
-# 問題1-B: 制約付きIsingモデル (Optuna版)
-# ===================================================================
+
 class Ising_B_Objective:
-    """
-    問題1-B（15アイテム, 2制約）の目的関数クラス
-    """
     def __init__(self):
         self.n_items = 15
         self.group_a_inds = list(range(5))
@@ -77,7 +72,6 @@ class Ising_B_Objective:
         
         self.ising_potentials = np.load('data/ising_potentials_b.npz')['ising_potentials']
         
-        # 【変更点】ペナルティ値を設定
         self.penalty = 20
 
         self._tensor_constraint = self.create_tensor_constraint()
@@ -88,10 +82,6 @@ class Ising_B_Objective:
         print("制約2: グループCの選択数がちょうど1個")
         
     def __call__(self, x_assignment):
-        """
-        目的関数: Isingエネルギーを計算（最小化が目的）
-        """
-        # --- 制約チェック ---
         count_a = sum(x_assignment[i] for i in self.group_a_inds)
         count_b = sum(x_assignment[i] for i in self.group_b_inds)
         count_c = sum(x_assignment[i] for i in self.group_c_inds)
@@ -102,7 +92,6 @@ class Ising_B_Objective:
         if not (is_rule1_valid and is_rule2_valid):
             return self.penalty
 
-        # --- エネルギー計算 (実行可能な解のみ) ---
         energy = 0
         for i in range(self.n_items):
             for j in range(i + 1, self.n_items):
@@ -111,18 +100,13 @@ class Ising_B_Objective:
         return energy
 
     def create_tensor_constraint(self):
-        """
-        全探索を行い、制約を満たす選択パターンの位置が1のテンソルを作成する。
-        """
         print("Creating tensor constraint for Ising-1B...")
         shape = tuple([2] * self.n_items)
         tensor_constraint = np.zeros(shape, dtype=np.int8)
 
-        # 全ての可能な選択パターンを生成 (2^15 = 32,768通り)
         all_assignments = itertools.product([0, 1], repeat=self.n_items)
 
         for assignment_tuple in all_assignments:
-            # 制約チェック
             count_a = sum(assignment_tuple[i] for i in self.group_a_inds)
             count_b = sum(assignment_tuple[i] for i in self.group_b_inds)
             count_c = sum(assignment_tuple[i] for i in self.group_c_inds)

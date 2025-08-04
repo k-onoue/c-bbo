@@ -1,0 +1,6 @@
+bash scripts_nnmilp_additional/run_array_launcher_nnmilp_gap_a.sh
+bash scripts_nnmilp_additional/run_array_launcher_nnmilp_gap_b.sh
+bash scripts_nnmilp_additional/run_array_launcher_nnmilp_ising_a.sh
+bash scripts_nnmilp_additional/run_array_launcher_nnmilp_ising_b.sh
+bash scripts_nnmilp_additional/run_array_launcher_nnmilp_sss.sh
+bash scripts_nnmilp_additional/run_array_launcher_nnmilp_tss.sh
